@@ -1638,7 +1638,7 @@ html.motion-lite .skel,html.motion-lite .aur,html.motion-lite .g-halo{animation:
 
 /* vetro CSS per la cromatura dell'app */
 .side,.top,.bnav,.sheet,.pop,.ctx,.toast{--lg-blur:22px}
-.side{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.012) 40%,rgba(255,255,255,0)),color-mix(in srgb,var(--surface) 62%,transparent)!important;-webkit-backdrop-filter:blur(var(--lg-blur)) saturate(170%) brightness(1.04);backdrop-filter:blur(var(--lg-blur)) saturate(170%) brightness(1.04);box-shadow:inset -1px 0 0 rgba(255,255,255,.06),inset 0 1px 0 rgba(255,255,255,.1),16px 0 50px -30px rgba(0,0,0,.6)}
+.side{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.012) 40%,rgba(255,255,255,0)),color-mix(in srgb,var(--surface) 62%,transparent)!important;-webkit-backdrop-filter:blur(var(--lg-blur)) saturate(170%) brightness(1.04);backdrop-filter:blur(var(--lg-blur)) saturate(170%) brightness(1.04);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),16px 0 50px -30px rgba(0,0,0,.6)}
 .side::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.06),transparent 140px);opacity:.8}
 .top{background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.015)),color-mix(in srgb,var(--bg) 46%,transparent)!important;-webkit-backdrop-filter:blur(var(--lg-blur)) saturate(180%) brightness(1.05);backdrop-filter:blur(var(--lg-blur)) saturate(180%) brightness(1.05);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 -1px 0 rgba(255,255,255,.04),0 10px 30px -20px rgba(0,0,0,.6);border-bottom:1px solid rgba(255,255,255,.08)!important}
 .bnav{-webkit-backdrop-filter:blur(26px) saturate(190%) brightness(1.06)!important;backdrop-filter:blur(26px) saturate(190%) brightness(1.06)!important}
@@ -1721,9 +1721,8 @@ main{padding-top:18px}
   .side{top:12px!important;left:12px!important;bottom:12px!important;border-radius:28px;border:1px solid var(--lgline)!important;
     background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.012) 30%,rgba(255,255,255,0)),var(--lgbg)!important;
     -webkit-backdrop-filter:blur(30px) saturate(200%) brightness(1.12);backdrop-filter:blur(30px) saturate(200%) brightness(1.12);
-    box-shadow:inset 0 1px 0 var(--lghi),inset -1px 0 0 rgba(255,255,255,.04),0 24px 60px -30px rgba(0,0,0,.8)!important}
+    box-shadow:inset 0 1px 0 var(--lghi),0 24px 60px -30px rgba(0,0,0,.8)!important}
   .side::after{border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.06),transparent 160px)}
-  .side::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;padding:1px;background:linear-gradient(160deg,rgba(255,255,255,.3),rgba(255,255,255,.03) 35%,rgba(255,255,255,.02) 75%,rgba(255,255,255,.16));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.9}
   :root{--sidew:248px}
   html.side-col{--sidew:90px}
   .side{width:calc(var(--sidew) - 12px)}
@@ -1735,10 +1734,113 @@ main{padding-top:18px}
   .top .gs-btn{flex:0 1 460px;max-width:460px;justify-content:flex-start}
   main{padding-top:22px}
 }
+
+
+/* ===================== VETRO VERO (WebGL, scena ferma) — attivo con html.lg-on =====================
+   Stessa geometria della cromatura CSS (pillola in alto, pannello laterale, pillola in basso),
+   ma il contenuto scorre in #app tra le barre e le lastre sono disegnate dalla scena. */
+:root{--toph:calc(12px + 52px + 10px + var(--safe-t));--navh:calc(96px + var(--safe-b))}
+html.lg-on,html.lg-on body{height:100%;overflow:hidden!important;overscroll-behavior:none}
+html.lg-on .aurora{display:none}
+html.lg-on body{background:transparent!important}
+.scene{display:contents}
+html.lg-on .scene{display:block;position:fixed;inset:0;min-height:0!important;overflow:hidden;background:var(--bg)!important;color:inherit!important;isolation:isolate}
+html.lg-on .scene::part(content){height:100%}
+html.lg-on .top{position:absolute!important;top:calc(12px + var(--safe-t));left:50%;right:auto;margin:0!important;transform:translateX(-50%);z-index:30}
+html.lg-on main#app{position:absolute;left:0;right:0;top:var(--toph);bottom:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;max-width:none;margin:0;padding-top:14px;scrollbar-gutter:stable;scrollbar-color:rgba(255,255,255,.18) transparent}
+html.lg-on main#app>*{max-width:1180px;margin-left:auto;margin-right:auto}
+@media (max-width:899px){
+  html.lg-on main#app{bottom:var(--navh);padding-bottom:24px}
+  html.lg-on .top{width:calc(100% - 24px)}
+}
+@media (min-width:900px){
+  html.lg-on main#app{left:var(--sidew);right:0;padding-left:max(32px,calc((100vw - var(--sidew) - 1180px)/2));padding-right:max(32px,calc((100vw - var(--sidew) - 1180px)/2));margin-left:0!important;padding-bottom:60px}
+  html.lg-on .side{position:absolute!important}
+  html.lg-on .top{left:calc(var(--sidew) + (100% - var(--sidew)) / 2);transform:translateX(-50%);transition:left .32s cubic-bezier(.2,.8,.2,1),width .32s cubic-bezier(.2,.8,.2,1)}
+}
+@media (min-width:1800px){html.lg-on main#app{padding-left:max(32px,calc((100vw - var(--sidew) - 1440px)/2));padding-right:max(32px,calc((100vw - var(--sidew) - 1440px)/2))}}
+/* le lastre [glass] non hanno sfondo proprio: lo disegna la scena */
+html.lg-on .top[glass],html.lg-on .bnav[glass],html.lg-on .side[glass]{background:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-color:transparent!important;box-shadow:none!important}
+html.lg-on .top[glass]::before,html.lg-on .side[glass]::before,html.lg-on .side[glass]::after{display:none}
+html.lg-on .top[glass]{--glass-depth:.7;--glass-dome:.6;--glass-frost:.5;--glass-tint:rgba(120,170,235,.22);--glass-pull:0;--glass-press:1;--glass-shadow:.6;--glass-chroma:.004}
+html.lg-on .bnav[glass]{--glass-depth:.8;--glass-dome:.7;--glass-frost:.5;--glass-tint:rgba(120,170,235,.22);--glass-pull:0;--glass-press:1;--glass-shadow:.9;--glass-chroma:.005}
+html.lg-on .side[glass]{--glass-depth:.55;--glass-dome:.35;--glass-frost:.55;--glass-tint:rgba(110,160,230,.2);--glass-pull:0;--glass-press:1;--glass-shadow:.5;--glass-chroma:.003}
+html.lg-on .gs-btn[glass]{background:transparent!important;border-color:transparent!important;box-shadow:none!important;--glass-depth:1.3;--glass-dome:1.2;--glass-frost:.25;--glass-tint:rgba(255,255,255,.12);--glass-pull:0;--glass-press:1;--glass-shadow:.5}
+html.lg-on .side-ind{background:linear-gradient(90deg,rgba(26,140,255,.32),rgba(26,140,255,.1))}
+
+/* "Bentornato": centrato sull'intera larghezza del gate, mai fuori dal suo contenitore */
+.g-hello{left:50%;right:auto;width:max-content;min-width:100%;transform:translate(-50%,8px)}
+.gate.said .g-hello{transform:translate(-50%,0)}
+.g-hello p{font-size:clamp(20px,min(2.1vw,3.4vh),32px);letter-spacing:.01em;text-shadow:0 2px 18px rgba(0,0,0,.6)}
+.g-hello .g-load{width:min(260px,70vw)}
+
+/* nella fase "Bentornato" il pulsante Google sparisce davvero (anche la sua lastra di vetro) */
+.gate.known .g-btn{visibility:hidden}
+.gate.known .g-btn[glass]{display:none!important}
+.gate.said .g-hello{transform:translate(-50%,0)}
+
+/* barra in basso: il filtro "goo" su iOS mostra un rettangolo al tocco → su Safari/iOS niente filtro, e in ogni caso tutto clippato alla pillola */
+.bnav{overflow:hidden}
+.goo{border-radius:999px;overflow:hidden}
+@supports (-webkit-touch-callout:none){.goo{filter:none}.blob.b{display:none}}
+@media (hover:none){.goo{filter:none}.blob.b{display:none}}
+
+/* ===================== MENU A TENDINA (telefono) ===================== */
+.ham{display:none;width:40px;height:40px;border-radius:999px;align-items:center;justify-content:center;color:var(--text);flex:none}
+.ham svg{width:22px;height:22px}
+@media (max-width:899px){
+  .ham{display:flex}
+  .top>button:nth-child(2) .logo{height:16px}
+}
+.drawer-back{position:fixed;inset:0;z-index:260;background:rgba(0,0,0,0);transition:background .28s;-webkit-tap-highlight-color:transparent}
+.drawer-back.in{background:rgba(0,0,0,.45)}
+.drawer{position:absolute;left:0;top:0;bottom:0;width:min(320px,86vw);padding:calc(14px + var(--safe-t)) 12px calc(14px + var(--safe-b));display:flex;flex-direction:column;gap:8px;overflow-y:auto;overscroll-behavior:contain;
+  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.012) 30%,rgba(255,255,255,0)),var(--lgbg);-webkit-backdrop-filter:blur(30px) saturate(200%) brightness(1.1);backdrop-filter:blur(30px) saturate(200%) brightness(1.1);
+  border-right:1px solid var(--lgline);box-shadow:inset 0 1px 0 var(--lghi),30px 0 80px -30px rgba(0,0,0,.8);border-radius:0 28px 28px 0;
+  transform:translateX(-104%);transition:transform .32s cubic-bezier(.2,.8,.2,1)}
+.drawer-back.in .drawer{transform:none}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:4px 10px 10px 14px}
+.drawer-head .logo{height:20px;color:var(--text)}
+.drawer-x{width:38px;height:38px;border-radius:999px;display:flex;align-items:center;justify-content:center;color:var(--muted);background:color-mix(in srgb,var(--text) 6%,transparent)}
+.drawer-x svg{width:18px;height:18px}
+.drawer-nav,.drawer-foot{display:flex;flex-direction:column;gap:2px}
+.drawer-grp{display:flex;flex-direction:column}
+.drawer-nav button,.drawer-foot button{position:relative;display:flex;align-items:center;gap:12px;height:46px;padding:0 14px;border-radius:13px;color:var(--muted);font:600 14px/46px Inter;text-align:left;white-space:nowrap}
+.drawer-nav button>svg,.drawer-foot button>svg{width:22px;height:22px;flex:none}
+.drawer-nav button>span,.drawer-foot button>span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.drawer-nav button.on{color:var(--text);background:color-mix(in srgb,var(--accent) 14%,transparent)}
+.drawer-nav button.on svg{color:var(--accent-2)}
+.drawer-nav .side-badge{margin-left:auto}
+.drawer .side-sub{display:flex;flex-direction:column;gap:1px;max-height:none;opacity:1;margin:2px 0 8px;overflow:visible}
+.drawer .side-sub button{height:38px;padding:0 14px;gap:12px;border-radius:11px;font:600 13px/38px Inter;color:var(--faint)}
+.drawer .side-sub button.on{color:var(--text);background:color-mix(in srgb,var(--accent) 9%,transparent)}
+.drawer .side-sub .sub-i{display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:7px;background:color-mix(in srgb,var(--text) 5%,transparent);color:var(--muted);flex:none}
+.drawer .side-sub .sub-i svg{width:14px;height:14px}
+.drawer .side-sub .sub-i .avatar{width:20px!important;height:20px!important;font-size:9px!important}
+.drawer .side-sub button.on .sub-i{color:#fff;background:var(--grad)}
+.drawer .side-sub .n{margin-left:auto;font:700 11px/1 var(--sp);color:var(--faint)}
+.drawer-foot{margin-top:auto;padding-top:10px;border-top:1px solid var(--line-soft)}
+.drawer-me{height:auto!important;padding:12px 8px 8px!important;gap:10px!important;margin-top:6px;border-top:1px solid var(--line-soft);border-radius:0!important}
+.drawer-me .avatar{flex:none}
+.drawer-me .me-tx{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0;line-height:1.1}
+.drawer-me .me-tx strong{font:800 13.5px/1 var(--sp);letter-spacing:.04em;text-transform:uppercase;color:var(--text)}
+.drawer-me .me-tx small{font:500 11.5px/1.2 Inter;color:var(--faint)}
+.drawer-me>svg{width:18px;height:18px;color:var(--faint)}
+@media (min-width:900px){.drawer-back{display:none}}
+
+.drawer .side-badge{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 7px;border-radius:999px;font:800 11px/1 var(--sp);color:#fff;margin-left:auto}
+.drawer .side-badge.no{background:var(--no)}.drawer .side-badge.doing{background:var(--doing);color:#1a1200}
+/* senza vetro WebGL la pillola in alto è fissa (niente contenuto che le passa sopra) */
+html:not(.lg-on) .top{position:fixed!important;top:calc(12px + var(--safe-t));left:50%;transform:translateX(-50%);margin:0!important}
+html:not(.lg-on) main{padding-top:calc(12px + 58px + 18px + var(--safe-t))}
+@media (min-width:900px){html:not(.lg-on) .top{left:calc(var(--sidew) + (100% - var(--sidew)) / 2)}}
+
+@media (min-width:900px){.top>button[aria-label="Home"],.top .ham{display:none!important}}
 </style>
 </head>
 <body data-theme="scuro">
 <div class="aurora" aria-hidden="true"><i class="au a"></i><i class="au b"></i><i class="au c"></i><i class="au d"></i></div>
+<div id="scene" class="scene">
 <header class="top">
   <button data-act="go" data-v="home" aria-label="Home" style="display:flex"><svg class="logo" viewBox="0 0 973.2 426.5" fill="currentColor" role="img" aria-label="SlabHub"><use href="#slabhub-logo" width="973.2" height="426.5"/></svg></button>
   <span class="grow"></span>
@@ -1746,6 +1848,7 @@ main{padding-top:18px}
 </header>
 <main id="app"><div class="skel"><i class="sk sk-h"></i><i class="sk sk-b"></i><i class="sk sk-b"></i><i class="sk sk-b sm"></i></div></main>
 <nav class="bnav" id="bnav" aria-label="Sezioni"></nav>
+</div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <!-- Logo ufficiale (claude/slabhub-logo.svg), non ridisegnato -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -3229,16 +3332,43 @@ function route() {
   else if (h.indexOf('canale-') === 0) { app.view = 'channel'; app.param = h.slice(7); }
   else { app.view = { task: 'tasks', catalogo: 'catalog', uscite: 'releases', canali: 'channels', finanze: 'finance', cronologia: 'log', idee: 'ideas', dashboard: 'dash' }[h] || 'home'; app.param = ''; }
 }
-function mainScrollY() { return window.scrollY; }
-function scrollMain(y) { window.scrollTo(0, y); }
-function scrollMainBy(d) { window.scrollBy(0, d); }
+/* con il vetro acceso il contenuto scorre dentro #app (pannello tra le barre), altrimenti nella finestra */
+function mainEl() { return document.documentElement.classList.contains('lg-on') ? document.getElementById('app') : null; }
+function mainScrollY() { var m = mainEl(); return m ? m.scrollTop : window.scrollY; }
+function scrollMain(y) { var m = mainEl(); if (m) m.scrollTop = y; else window.scrollTo(0, y); }
+function scrollMainBy(d) { var m = mainEl(); if (m) m.scrollTop += d; else window.scrollBy(0, d); }
+/* Vetro liquido (WebGL) fermo: la scena disegna una volta e ridisegna solo quando cambia il layout.
+   Il puntatore viene ignorato (niente luce che insegue il mouse, niente ridisegni mentre ti muovi). */
+function glassWanted() { return lsGet('hq-glass', '1') === '1' && resolvedTheme() !== 'chiaro' && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches && false); }
+function freezeGlassPointer(el) {
+  try {
+    if (!el.pointer) return;
+    ['inside', 'down'].forEach(function (k) { Object.defineProperty(el.pointer, k, { get: function () { return false; }, set: function () {}, configurable: true }); });
+  } catch (e) {}
+}
+function bootGlassScene() {
+  var sc = document.getElementById('scene'); if (!sc) return;
+  var want = glassWanted(), isLG = sc.tagName.toLowerCase() === 'liquid-glass';
+  var dim = resolvedTheme() === 'notte' ? '.78' : '.6';
+  if (want === isLG) { if (isLG) sc.setAttribute('dim', dim); }
+  else {
+    var el = document.createElement(want ? 'liquid-glass' : 'div');
+    if (want) { el.setAttribute('backdrop', 'aurora'); el.setAttribute('colors', '#1A8CFF #0A2A4F #3AA0FF #04162E'); el.setAttribute('dim', dim); el.setAttribute('reduce-motion', ''); }
+    el.id = 'scene'; el.className = 'scene';
+    while (sc.firstChild) el.appendChild(sc.firstChild);
+    sc.parentNode.replaceChild(el, sc); sc = el;
+  }
+  document.documentElement.classList.toggle('lg-on', want);
+  ['.top', '.bnav', '.side', '.gs-btn'].forEach(function (q) { document.querySelectorAll(q).forEach(function (n) { if (want) n.setAttribute('glass', ''); else n.removeAttribute('glass'); }); });
+  if (want && window.customElements) customElements.whenDefined('liquid-glass').then(function () { freezeGlassPointer(document.getElementById('scene')); });
+}
 var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 if (lsGet('hq-motion', 'full') === 'lite') { reduceMotion = true; document.documentElement.classList.add('motion-lite'); }
 if (lsGet('hq-aurora', '1') === '0') document.documentElement.classList.add('no-aurora');
 /* tema: 'auto' segue il sistema (chiaro di giorno se il sistema è chiaro, altrimenti scuro) */
 var THEMES = [['scuro', 'Scuro'], ['chiaro', 'Chiaro'], ['notte', 'Notte'], ['auto', 'Sistema']];
 function resolvedTheme() { var t = app.theme; if (t === 'oro') t = 'notte'; if (t === 'auto') t = (window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches) ? 'chiaro' : 'scuro'; return t; }
-function applyTheme() { document.body.setAttribute('data-theme', resolvedTheme()); var m = document.querySelector('meta[name=theme-color]'); if (m) m.setAttribute('content', resolvedTheme() === 'chiaro' ? '#F3F6FA' : '#000000'); }
+function applyTheme() { document.body.setAttribute('data-theme', resolvedTheme()); if (typeof bootGlassScene === 'function') bootGlassScene(); var m = document.querySelector('meta[name=theme-color]'); if (m) m.setAttribute('content', resolvedTheme() === 'chiaro' ? '#F3F6FA' : '#000000'); }
 if (window.matchMedia) { try { matchMedia('(prefers-color-scheme: light)').addEventListener('change', function () { if (app.theme === 'auto') applyTheme(); }); } catch (e) {} }
 function navSync(hash) {
   app.skipHash = ('#' + hash) !== location.hash;
@@ -4301,6 +4431,7 @@ function openSettings() {
     body: '<p class="set-h">Aspetto</p>' +
       settingsRow('Tema', 'Sistema segue il tema del telefono o del computer', optGroup('theme-x', THEMES, app.theme === 'oro' ? 'notte' : app.theme, function (o) { return '<i class="th-dot th-' + o[0] + '"></i>'; }, 'themes') + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">' + stChip('yes') + stChip('no') + stChip('unknown') + '</div>') +
       settingsRow('Animazioni', 'Ridotte: niente transizioni di pagina e meno movimento', optGroup('motion-x', [['full', 'Complete'], ['lite', 'Ridotte']], lsGet('hq-motion', 'full'))) +
+      settingsRow('Vetro liquido', 'Barre e pannelli come lastre di vetro vere (WebGL, scena ferma: non pesa). Spegnilo se il dispositivo fatica; non attivo col tema Chiaro.', optGroup('glass-x', [['1', 'Attivo'], ['0', 'Spento']], lsGet('hq-glass', '1'))) +
       settingsRow('Aurora di sfondo', 'Luci lente dietro le barre di vetro. In CSS: quasi zero batteria', optGroup('aurora-x', [['1', 'Attiva'], ['0', 'Spenta']], lsGet('hq-aurora', '1'))) +
       '<p class="set-h">Feedback</p>' +
       settingsRow('Suoni', '', optGroup('sound-x', [['1', 'Attivi'], ['0', 'Spenti']], lsGet('hq-sound', '1'))) +
@@ -4317,6 +4448,7 @@ function openSettings() {
       '<div class="actions"><button type="button" class="btn" style="flex:1" data-sact="close">Chiudi</button></div>',
     onOpt: function (grp, val) {
       if (grp === 'theme-x') { app.theme = val; lsSet('hq-theme', val); applyTheme(); Sfx.play('toggle'); }
+      if (grp === 'glass-x') { lsSet('hq-glass', val); bootGlassScene(); updateSide(); Sfx.play('toggle'); }
       if (grp === 'aurora-x') { lsSet('hq-aurora', val); document.documentElement.classList.toggle('no-aurora', val === '0'); Sfx.play('toggle'); }
       if (grp === 'motion-x') { lsSet('hq-motion', val); reduceMotion = val === 'lite' || !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); document.documentElement.classList.toggle('motion-lite', val === 'lite'); }
       if (grp === 'sound-x') { lsSet('hq-sound', val); if (val === '1') Sfx.play('check'); }
@@ -5010,6 +5142,8 @@ document.addEventListener('click', function (e) {
     case 'c-tab': app.c.tab = v; render(); break;
     case 'side-toggle': toggleSide(); break;
     case 'side-sub': sideSub(v); break;
+    case 'drawer': openDrawer(); break;
+    case 'drawer-close': closeDrawer(); break;
     case 'settings': openSettings(); break;
     case 'news-close': lsSet('hq-news-dismiss-' + app.actor, v); Sfx.play('undo'); render(); break;
     case 'search': openSearch(); break;
@@ -6021,6 +6155,7 @@ document.addEventListener('keydown', function (e) {
 (function () {
   var who = document.getElementById('who'); if (!who) return;
   who.insertAdjacentHTML('beforebegin', '<button class="gs-btn" data-act="search" aria-label="Cerca" title="Cerca (⌘K)">' + I.search + '<span>Cerca</span><kbd>⌘K</kbd></button>');
+  if (document.documentElement.classList.contains('lg-on')) who.previousElementSibling.setAttribute('glass', '');
 })();
 
 /* ---------- AZIONI RAPIDE ---------- */
@@ -6319,7 +6454,8 @@ function buildSide() {
     '<div class="side-foot"><button data-act="phase-editor" title="Fasi dei prodotti">' + I.stDoing + '<span>Fasi</span></button><button data-act="settings" title="Impostazioni">' + I.gear + '<span>Impostazioni</span></button>' +
     '<button class="side-tog" data-act="side-toggle" title="' + (col ? 'Allarga' : 'Restringi') + '" aria-label="Allarga o restringi la barra">' + I.chev + '</button>' +
     '<button class="side-me" data-act="me-menu" aria-label="Profilo"></button></div></aside>';
-  document.body.insertAdjacentHTML('afterbegin', html);
+  var host = document.getElementById('scene') || document.body; host.insertAdjacentHTML('afterbegin', html);
+  if (document.documentElement.classList.contains('lg-on')) document.getElementById('side').setAttribute('glass', '');
   document.documentElement.classList.toggle('side-col', col);
 }
 /* Icone delle sottosezioni (stesso tratto delle icone principali) */
@@ -6449,6 +6585,41 @@ buildSide();
   window.addEventListener('resize', function () { updateSide(); });
 })();
 
+
+/* ===== Telefono: menu a tendina (drawer) con le stesse voci della barra laterale ===== */
+var I_HAM = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>';
+function drawerHtml() {
+  var cur = navCur(), bd = sideBadges(), pr = person(app.actor);
+  return '<div class="drawer-head"><svg class="logo" viewBox="0 0 973.2 426.5" fill="currentColor"><use href="#slabhub-logo" width="973.2" height="426.5"/></svg><button class="drawer-x" data-act="drawer-close" aria-label="Chiudi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>' +
+    '<nav class="drawer-nav">' + SIDE_ITEMS.map(function (s) {
+      var on = s[0] === cur, v = bd[s[0]];
+      return '<div class="drawer-grp' + (on ? ' on' : '') + '"><button class="' + (on ? 'on' : '') + '" data-act="go" data-v="' + s[1] + '">' + I[s[3]] + '<span>' + s[2] + '</span>' + (v ? '<b class="side-badge ' + v.cls + '">' + v.n + '</b>' : '') + '</button>' +
+        (on ? '<div class="side-sub open">' + sideSubHtml(s[0]) + '</div>' : '') + '</div>';
+    }).join('') + '</nav>' +
+    '<div class="drawer-foot"><button data-act="phase-editor">' + I.stDoing + '<span>Fasi</span></button><button data-act="settings">' + I.gear + '<span>Impostazioni</span></button>' +
+    '<button class="drawer-me" data-act="go" data-v="profilo-' + app.actor + '">' + avatar(app.actor, 36) + '<span class="me-tx"><strong>' + esc(pr.name) + '</strong><small>' + esc(pr.title || 'Profilo') + '</small></span>' + I.arrow + '</button></div>';
+}
+function openDrawer() {
+  if (document.getElementById('drawer')) return closeDrawer();
+  var el = document.createElement('div'); el.id = 'drawer'; el.className = 'drawer-back';
+  el.innerHTML = '<aside class="drawer" role="dialog" aria-label="Menu">' + drawerHtml() + '</aside>';
+  document.body.appendChild(el);
+  el.addEventListener('click', function (e) { if (e.target === el) closeDrawer(); else if (e.target.closest('[data-act]') && !e.target.closest('[data-act="drawer-close"]')) setTimeout(closeDrawer, 60); });
+  requestAnimationFrame(function () { el.classList.add('in'); });
+  Sfx.play('open'); haptic(8);
+}
+function closeDrawer() {
+  var el = document.getElementById('drawer'); if (!el) return;
+  el.classList.remove('in'); setTimeout(function () { el.remove(); }, 280);
+}
+(function () {
+  function mountHam() {
+    var top = document.querySelector('.top'); if (!top || top.querySelector('.ham')) return;
+    top.insertAdjacentHTML('afterbegin', '<button class="ham" data-act="drawer" aria-label="Menu">' + I_HAM + '</button>');
+  }
+  mountHam();
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDrawer(); });
+})();
 
 /* ================= TASK DA TELEFONO: corsie a scorrimento + sposta con pressione lunga ================= */
 function laneScroll(l, smooth) {
