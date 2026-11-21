@@ -1,2 +1,2 @@
 # SlabHub HQ
-Un solo file (`public/index.html`). Ogni push su `main` pubblica su Firebase Hosting (hq.gamanstudio.it).
+Un solo file (`public/index.html`). Ogni push su `main` pubblica su Firebase Hosting (hq.gamanstudio.it, gestionale-slabhub.web.app).

@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "gestionale-gabriele",
+    "site": "gestionale-slabhub",
     "public": "public",
     "ignore": ["firebase.json", "**/.*"],
     "cleanUrls": true,
