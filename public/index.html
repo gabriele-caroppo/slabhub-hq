@@ -1662,9 +1662,37 @@ html.motion-lite .skel,html.motion-lite .aur,html.motion-lite .g-halo{animation:
 .pop .pop-out svg{transform:rotate(45deg)}
 
 
+
+
+/* ===================== AURORA DI SFONDO IN CSS (21/11) =====================
+   Tre luci già sfumate (radial-gradient, nessun filter) che si muovono solo con transform:
+   costo quasi nullo, il vetro CSS delle barre le sfoca sotto, il contenuto ci passa sopra. */
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;contain:strict}
+.aurora .au{position:absolute;border-radius:50%;will-change:transform;opacity:.9;mix-blend-mode:screen}
+.aurora .a{width:70vmax;height:70vmax;left:-20vmax;top:-26vmax;background:radial-gradient(circle at 50% 50%,rgba(26,140,255,.34),rgba(26,140,255,.1) 42%,rgba(26,140,255,0) 68%);animation:auA 38s ease-in-out infinite alternate}
+.aurora .b{width:64vmax;height:64vmax;right:-24vmax;top:10vmax;background:radial-gradient(circle at 50% 50%,rgba(58,160,255,.22),rgba(21,87,168,.09) 45%,rgba(21,87,168,0) 70%);animation:auB 46s ease-in-out infinite alternate}
+.aurora .c{width:60vmax;height:60vmax;left:16vmax;bottom:-32vmax;background:radial-gradient(circle at 50% 50%,rgba(11,116,224,.2),rgba(6,32,64,.08) 45%,rgba(6,32,64,0) 70%);animation:auC 54s ease-in-out infinite alternate}
+@keyframes auA{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(14vmax,10vmax,0) scale(1.12)}}
+@keyframes auB{from{transform:translate3d(0,0,0) scale(1.05)}to{transform:translate3d(-16vmax,12vmax,0) scale(.92)}}
+@keyframes auC{from{transform:translate3d(0,0,0) scale(.95)}to{transform:translate3d(12vmax,-14vmax,0) scale(1.1)}}
+html.no-aurora .aurora{display:none}
+html.motion-lite .aurora .au{animation:none}
+@media (prefers-reduced-motion:reduce){.aurora .au{animation:none}}
+[data-theme="notte"] .aurora .au{opacity:.55}
+[data-theme="chiaro"] .aurora .au{mix-blend-mode:multiply;opacity:.5}
+[data-theme="chiaro"] .aurora .a{background:radial-gradient(circle at 50% 50%,rgba(26,140,255,.18),rgba(26,140,255,.05) 42%,rgba(26,140,255,0) 68%)}
+[data-theme="chiaro"] .aurora .b{background:radial-gradient(circle at 50% 50%,rgba(120,190,255,.16),rgba(120,190,255,.04) 45%,rgba(120,190,255,0) 70%)}
+[data-theme="chiaro"] .aurora .c{background:radial-gradient(circle at 50% 50%,rgba(11,116,224,.12),rgba(11,116,224,.03) 45%,rgba(11,116,224,0) 70%)}
+/* il contenuto e la cromatura stanno sopra l'aurora */
+.top,.bnav,.side,main,.fab,.toast,.back,.sheet,.pop{isolation:isolate}
+main{position:relative;z-index:1}
+/* le barre di vetro sfocano l'aurora: un filo meno tinta così si vede */
+.side{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01) 40%,rgba(255,255,255,0)),color-mix(in srgb,var(--surface) 52%,transparent)!important}
+.top{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.012)),color-mix(in srgb,var(--bg) 38%,transparent)!important}
 </style>
 </head>
 <body data-theme="scuro">
+<div class="aurora" aria-hidden="true"><i class="au a"></i><i class="au b"></i><i class="au c"></i></div>
 <header class="top">
   <button data-act="go" data-v="home" aria-label="Home" style="display:flex"><svg class="logo" viewBox="0 0 973.2 426.5" fill="currentColor" role="img" aria-label="SlabHub"><use href="#slabhub-logo" width="973.2" height="426.5"/></svg></button>
   <span class="grow"></span>
@@ -3160,6 +3188,7 @@ function scrollMain(y) { window.scrollTo(0, y); }
 function scrollMainBy(d) { window.scrollBy(0, d); }
 var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 if (lsGet('hq-motion', 'full') === 'lite') { reduceMotion = true; document.documentElement.classList.add('motion-lite'); }
+if (lsGet('hq-aurora', '1') === '0') document.documentElement.classList.add('no-aurora');
 /* tema: 'auto' segue il sistema (chiaro di giorno se il sistema è chiaro, altrimenti scuro) */
 var THEMES = [['scuro', 'Scuro'], ['chiaro', 'Chiaro'], ['notte', 'Notte'], ['auto', 'Sistema']];
 function resolvedTheme() { var t = app.theme; if (t === 'oro') t = 'notte'; if (t === 'auto') t = (window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches) ? 'chiaro' : 'scuro'; return t; }
@@ -4226,6 +4255,7 @@ function openSettings() {
     body: '<p class="set-h">Aspetto</p>' +
       settingsRow('Tema', 'Sistema segue il tema del telefono o del computer', optGroup('theme-x', THEMES, app.theme === 'oro' ? 'notte' : app.theme, function (o) { return '<i class="th-dot th-' + o[0] + '"></i>'; }, 'themes') + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">' + stChip('yes') + stChip('no') + stChip('unknown') + '</div>') +
       settingsRow('Animazioni', 'Ridotte: niente transizioni di pagina e meno movimento', optGroup('motion-x', [['full', 'Complete'], ['lite', 'Ridotte']], lsGet('hq-motion', 'full'))) +
+      settingsRow('Aurora di sfondo', 'Luci lente dietro le barre di vetro. In CSS: quasi zero batteria', optGroup('aurora-x', [['1', 'Attiva'], ['0', 'Spenta']], lsGet('hq-aurora', '1'))) +
       '<p class="set-h">Feedback</p>' +
       settingsRow('Suoni', '', optGroup('sound-x', [['1', 'Attivi'], ['0', 'Spenti']], lsGet('hq-sound', '1'))) +
       settingsRow('Vibrazione', 'Solo sul telefono, quando completi o sposti qualcosa', optGroup('haptic-x', [['1', 'Attiva'], ['0', 'Spenta']], lsGet('hq-haptic', '1'))) +
@@ -4241,6 +4271,7 @@ function openSettings() {
       '<div class="actions"><button type="button" class="btn" style="flex:1" data-sact="close">Chiudi</button></div>',
     onOpt: function (grp, val) {
       if (grp === 'theme-x') { app.theme = val; lsSet('hq-theme', val); applyTheme(); Sfx.play('toggle'); }
+      if (grp === 'aurora-x') { lsSet('hq-aurora', val); document.documentElement.classList.toggle('no-aurora', val === '0'); Sfx.play('toggle'); }
       if (grp === 'motion-x') { lsSet('hq-motion', val); reduceMotion = val === 'lite' || !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); document.documentElement.classList.toggle('motion-lite', val === 'lite'); }
       if (grp === 'sound-x') { lsSet('hq-sound', val); if (val === '1') Sfx.play('check'); }
       if (grp === 'haptic-x') { lsSet('hq-haptic', val); if (val === '1') haptic(12); }
