@@ -377,10 +377,10 @@ main{max-width:1180px;margin:0 auto;padding:26px 20px calc(116px + var(--safe-b)
 [data-theme="chiaro"] .f select,[data-theme="chiaro"] .mini-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5l5-5' fill='none' stroke='%230A111B' stroke-opacity='.5' stroke-width='1.6'/%3E%3C/svg%3E")}
 [data-theme="chiaro"] .f input[type=date],[data-theme="chiaro"] .f input[type=time]{color-scheme:light}
 [data-theme="chiaro"] .tile,[data-theme="chiaro"] .item,[data-theme="chiaro"] .rcard,[data-theme="chiaro"] .tcard,[data-theme="chiaro"] .req{box-shadow:0 1px 2px rgba(10,30,60,.06)}
-[data-theme="oro"]{--accent:#D4AF6A;--accent-2:#E8CB8E;--grad:linear-gradient(135deg,#E8CB8E 0%,#6B4F1F 100%);--page:linear-gradient(180deg,#2B2211 0%,#15110A 260px,#060A10 620px);
-  --yes:#D4AF6A;--yes-bg:rgba(212,175,106,.15);--unk:#9AA6B8;--p-media:#D4AF6A;--thumb-bg:linear-gradient(180deg,#1E1A12 0%,#0B0F15 100%);--line:rgba(232,203,142,.16)}
-[data-theme="oro"] .intro h1 b,[data-theme="oro"] .dhead h1 b{background:linear-gradient(180deg,#F1DCA8,#B88A3E);-webkit-background-clip:text;background-clip:text;color:transparent}
-[data-theme="oro"] .logo{color:#E8CB8E}
+[data-theme="notte"]{--bg:#000;--surface:#05080C;--card:#0A0E14;--card-2:#10151D;--text:#ECF1F8;--muted:rgba(236,241,248,.6);--faint:rgba(236,241,248,.36);--line:rgba(255,255,255,.085);--line-soft:rgba(255,255,255,.05);
+  --accent:#2C8AE8;--accent-2:#4C9FF5;--grad:linear-gradient(135deg,#3E96EE 0%,#1557A8 100%);--page:#000;--glass:rgba(0,0,0,.86);--track:rgba(255,255,255,.07);--thumb-bg:linear-gradient(180deg,#0B1118 0%,#05080C 100%);--nest:#000;--shadow:0 18px 50px rgba(0,0,0,.8);--p-media:#4C9FF5}
+[data-theme="notte"] .intro h1 b,[data-theme="notte"] .dhead h1 b{background:linear-gradient(180deg,#FFFFFF,#9FB3CC);-webkit-background-clip:text;background-clip:text;color:transparent}
+[data-theme="notte"] .logo{color:#ECF1F8}
 
 /* ---------- popover "Altro" che nasce dal tasto ---------- */
 .pop-back{position:fixed;inset:0;z-index:55}
@@ -459,7 +459,7 @@ main{max-width:1180px;margin:0 auto;padding:26px 20px calc(116px + var(--safe-b)
 /* ---------- profili ---------- */
 .avatar{flex:none;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;overflow:hidden;font-family:var(--sp);font-weight:900;color:#fff;background:var(--grad);box-shadow:0 0 0 2px var(--bg);position:relative}
 .avatar.av-valerio{background:linear-gradient(135deg,#7FB4E8 0%,#0E2C4F 100%)}
-[data-theme="oro"] .avatar.av-gabriele{background:var(--grad)}
+
 .avatar img{width:100%;height:100%;object-fit:cover;display:block}
 .avatar.big{box-shadow:0 0 0 3px var(--bg),0 0 0 4.5px var(--accent)}
 .avatar.basket{background:var(--card-2);color:var(--muted)}
@@ -582,8 +582,8 @@ button.block-go:active{opacity:.7}
 [data-theme="chiaro"] .bnav{background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.35)),rgba(243,246,250,.4)!important;border-color:rgba(255,255,255,.8)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 14px 34px rgba(10,30,60,.18)}
 [data-theme="chiaro"] .bnav button{color:rgba(10,17,27,.55)!important}
 [data-theme="chiaro"] .top{background:rgba(243,246,250,.55)!important;border-bottom-color:rgba(10,17,27,.08)}
-[data-theme="oro"] .pill-ind{background:linear-gradient(180deg,rgba(240,210,150,.78),rgba(190,145,70,.58));box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 8px 18px rgba(212,175,106,.35)}
-[data-theme="oro"] .bnav button.on,[data-theme="oro"] .bnav button.on svg{color:#1a1206!important}
+[data-theme="notte"] .pill-ind{background:linear-gradient(180deg,rgba(76,159,245,.7),rgba(21,87,168,.55));box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 18px rgba(44,138,232,.3)}
+
 main{padding-bottom:calc(110px + var(--safe-b))}
 @media (min-width:900px){.bnav{width:400px}}
 .tab{min-width:0;gap:6px;padding:0 6px;letter-spacing:.04em;font-size:12px}
@@ -597,7 +597,7 @@ html{overflow-x:hidden}body{overflow-x:clip}
 .tcard.has-prog::after{content:"";position:absolute;z-index:0;left:0;top:0;bottom:0;width:calc(var(--prog,0) * 100%);background:linear-gradient(90deg,rgba(26,140,255,.30),rgba(58,160,255,.18));transition:width .9s cubic-bezier(.2,.8,.2,1)}
 .tcard.done.has-prog::after{background:linear-gradient(90deg,rgba(26,140,255,.42),rgba(58,160,255,.30))}
 .tcard.done .tt{text-decoration:none;color:var(--text);opacity:.75}
-[data-theme="oro"] .tcard.has-prog::after{background:linear-gradient(90deg,rgba(212,175,106,.30),rgba(232,203,142,.16))}
+[data-theme="notte"] .tcard.has-prog::after{background:linear-gradient(90deg,rgba(44,138,232,.26),rgba(44,138,232,.1))}
 [data-theme="chiaro"] .tcard.has-prog::after{background:linear-gradient(90deg,rgba(11,116,224,.18),rgba(11,116,224,.08))}
 @keyframes pop{0%{transform:translateY(-50%) scale(.6)}100%{transform:translateY(-50%) scale(1)}}
 .meta .kind{display:inline-flex;align-items:center;gap:5px;color:var(--accent-2)}
@@ -638,8 +638,8 @@ html{overflow-x:hidden}body{overflow-x:clip}
 .gloss{position:absolute;left:0;top:7px;height:52px;border-radius:999px;z-index:1;pointer-events:none;opacity:0;will-change:transform,width;
   background:linear-gradient(180deg,rgba(255,255,255,.38) 0%,rgba(255,255,255,.08) 45%,rgba(255,255,255,0) 60%);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 10px 22px rgba(26,140,255,.38)}
-[data-theme="oro"] .blob{background:linear-gradient(180deg,#F1DCA8,#C79B4E)}
-[data-theme="oro"] .gloss{box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 10px 22px rgba(212,175,106,.35)}
+[data-theme="notte"] .blob{background:linear-gradient(180deg,#4C9FF5,#1557A8)}
+[data-theme="notte"] .gloss{box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 10px 22px rgba(0,0,0,.6)}
 .bnav button{z-index:2}
 .bnav button.on svg{transform:scale(1.08)}
 .bnav button svg{transition:transform .5s var(--spring),color .3s}
@@ -897,7 +897,7 @@ p.wb-hint{padding:10px 14px 14px;margin:0}
    ====================================================== */
 :root{--ok:#2EBF8C;--ok-bg:rgba(46,191,140,.15);--ok-border:rgba(46,191,140,.55);--doing:#E6B45A;--doing-bg:rgba(230,180,90,.14);--doing-border:rgba(230,180,90,.55);--yes:var(--ok);--yes-bg:var(--ok-bg)}
 [data-theme="chiaro"]{--ok:#119A6A;--ok-bg:rgba(17,154,106,.11);--ok-border:rgba(17,154,106,.5);--doing:#B07A12;--doing-bg:rgba(176,122,18,.11);--doing-border:rgba(176,122,18,.5);--yes:var(--ok);--yes-bg:var(--ok-bg)}
-[data-theme="oro"]{--yes:var(--ok);--yes-bg:var(--ok-bg)}
+[data-theme="notte"]{--yes:var(--ok);--yes-bg:var(--ok-bg)}
 
 /* --- gerarchia pulsanti --- */
 .btn,.btn.sm,.pill,.chip.act,.link-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px}
@@ -1524,6 +1524,59 @@ html.app-in main>*:nth-child(2){animation-delay:.08s}html.app-in main>*:nth-chil
   .top{padding-right:max(32px,calc((100vw - var(--sidew) - 1180px)/2))!important}
 }
 @media (min-width:1800px){main{padding-left:max(32px,calc((100vw - var(--sidew) - 1440px)/2));padding-right:max(32px,calc((100vw - var(--sidew) - 1440px)/2))}}
+
+
+/* ===================== TEMI SECONDARI (21/11): Chiaro rifinito, Notte (OLED) ===================== */
+[data-theme="chiaro"]{--card-2:#EDF2F8;--line:rgba(10,17,27,.11);--shadow:0 14px 36px rgba(10,30,60,.14)}
+[data-theme="chiaro"] .side{background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.78));border-right-color:rgba(10,17,27,.08);box-shadow:8px 0 30px -18px rgba(10,30,60,.25)}
+[data-theme="chiaro"] .side-nav button:hover,[data-theme="chiaro"] .side-foot button:hover{background:rgba(10,17,27,.05)}
+[data-theme="chiaro"] .side-ind{background:linear-gradient(90deg,rgba(11,116,224,.16),rgba(11,116,224,.05))}
+[data-theme="chiaro"] .block,[data-theme="chiaro"] .tcard,[data-theme="chiaro"] .tile,[data-theme="chiaro"] .item{border-color:rgba(10,17,27,.09)}
+[data-theme="chiaro"] .block{box-shadow:0 1px 2px rgba(10,30,60,.05),0 10px 30px -18px rgba(10,30,60,.18)}
+[data-theme="chiaro"] .side-logo{color:#0A111B}
+[data-theme="chiaro"] .pop,[data-theme="chiaro"] .sheet{box-shadow:0 24px 60px rgba(10,30,60,.22)}
+[data-theme="chiaro"] .side-nav .side-sub .sub-i{background:rgba(10,17,27,.06);color:rgba(10,17,27,.6)}
+[data-theme="chiaro"] .set-h{color:rgba(10,17,27,.5)}
+[data-theme="notte"] .side{background:#000;border-right-color:rgba(255,255,255,.07)}
+[data-theme="notte"] .top{background:rgba(0,0,0,.72)!important;border-bottom-color:rgba(255,255,255,.07)}
+[data-theme="notte"] .block,[data-theme="notte"] .tcard,[data-theme="notte"] .tile,[data-theme="notte"] .item,[data-theme="notte"] .sheet,[data-theme="notte"] .pop{box-shadow:none}
+[data-theme="notte"] .btn.primary,[data-theme="notte"] .fab{box-shadow:0 10px 24px -12px rgba(44,138,232,.6)}
+[data-theme="notte"] .side-ind{background:linear-gradient(90deg,rgba(44,138,232,.2),rgba(44,138,232,.06))}
+[data-theme="notte"] .bnav{background:rgba(0,0,0,.82)!important}
+[data-theme="notte"] body,[data-theme="notte"]{background:#000}
+
+/* Impostazioni */
+.set-h{margin:20px 0 10px;font:800 11px/1 var(--sp);letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+.set-h:first-child{margin-top:4px}
+.set-row .l{display:flex;flex-direction:column;gap:3px}
+.set-help{font:500 12px/1.35 Inter;color:var(--faint);text-transform:none;letter-spacing:0}
+.set-acc{flex-direction:row!important;align-items:center;gap:12px}
+.set-acc .tx{flex:1;min-width:0}.set-acc .tx strong{display:block;font:800 15px/1.1 var(--sp);text-transform:uppercase}.set-acc .tx small{display:block;color:var(--muted);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.set-foot{margin:18px 0 4px;text-align:center;font:600 11.5px/1 Inter;color:var(--faint)}
+.opts.themes button{gap:8px}
+.th-dot{width:14px;height:14px;border-radius:50%;flex:none;border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
+.th-scuro{background:linear-gradient(135deg,#0A2A4F,#060A10)}.th-chiaro{background:linear-gradient(135deg,#FFFFFF,#DCEBFB)}.th-notte{background:#000}.th-auto{background:linear-gradient(90deg,#F3F6FA 50%,#060A10 50%)}
+
+/* Profilo in basso a sinistra (desktop) */
+@media (min-width:900px){
+  .top #who{display:none!important}
+  .side-foot{position:relative;padding-bottom:0}
+  .side-me{display:flex!important;align-items:center;gap:10px;height:auto!important;padding:14px 8px 10px!important;margin-top:8px;border-top:1px solid var(--line-soft);border-radius:0 0 14px 14px!important}
+  .side-me .avatar{flex:none}
+  .side-me .me-tx{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1;text-align:left}
+  .side-me .me-tx strong{font:800 13.5px/1 var(--sp);letter-spacing:.04em;text-transform:uppercase;color:var(--text)}
+  .side-me .me-tx small{font:500 11.5px/1.2 Inter;color:var(--faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .side-me .me-dots{display:flex;color:var(--faint);transition:transform .3s var(--spring),color .2s}
+  .side-me .me-dots svg{width:18px;height:18px}
+  .side-me:hover .me-dots{color:var(--text);transform:rotate(90deg)}
+  html.side-col .side-me{justify-content:center;padding:12px 0!important}
+  html.side-col .side-me .me-tx,html.side-col .side-me .me-dots{display:none}
+  .side-tog{order:-1}
+  .pop.up{transform:scale(.6) translateY(10px)}
+  .pop.up.in{transform:none}
+}
+html.motion-lite *,html.motion-lite *::before,html.motion-lite *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.1s!important;scroll-behavior:auto!important}
+html.motion-lite .skel,html.motion-lite .aur,html.motion-lite .g-halo{animation:none!important}
 </style>
 </head>
 <body data-theme="scuro">
@@ -1946,7 +1999,7 @@ function startFirebase() {
       sha256(String(user.email || '').trim().toLowerCase()).then(function (h) {
         var who = AUTH_HASHES[h];
         if (!who) { loginScreen(doLogin, 'L’account ' + user.email + ' non è abilitato. Entra con l’account di Gabriele o di Valerio.'); fb.signOut(auth); return; }
-        app.actor = who; lsSet('hq-actor', who); lsSet('hq-actor-set', '1'); app.authed = true; app.signOut = function () { fb.signOut(auth).then(function () { location.reload(); }); };
+        app.actor = who; lsSet('hq-actor', who); lsSet('hq-actor-set', '1'); app.authed = true; app.user = { email: user.email || '' }; app.signOut = function () { fb.signOut(auth).then(function () { location.reload(); }); };
         gateWho(who);
         if (!started) { started = true; listen(); }
       });
@@ -2103,7 +2156,7 @@ var I = {
   ch: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.6" cy="7.4" r=".8" fill="currentColor"/></svg>',
   euro: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 6.5A6.5 6.5 0 1 0 17 17.5M4.5 10.5h9M4.5 13.5h9"/></svg>',
   hist: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4M12 8v4l3 2"/></svg>',
-  gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/></svg>',
+  gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3 1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8 1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
   edit: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 2.5l2 2L6 12l-3 1 1-3zM10 4l2 2"/></svg>',
   ext: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H3.5v9.5H13V9M9 3h4v4M13 3 7.5 8.5"/></svg>',
   save: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8.5 3.2 3.2L13 4.5"/></svg>',
@@ -2141,6 +2194,12 @@ function route() {
   else { app.view = { task: 'tasks', catalogo: 'catalog', uscite: 'releases', canali: 'channels', finanze: 'finance', cronologia: 'log', idee: 'ideas', dashboard: 'dash' }[h] || 'home'; app.param = ''; }
 }
 var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+if (lsGet('hq-motion', 'full') === 'lite') { reduceMotion = true; document.documentElement.classList.add('motion-lite'); }
+/* tema: 'auto' segue il sistema (chiaro di giorno se il sistema è chiaro, altrimenti scuro) */
+var THEMES = [['scuro', 'Scuro'], ['chiaro', 'Chiaro'], ['notte', 'Notte'], ['auto', 'Sistema']];
+function resolvedTheme() { var t = app.theme; if (t === 'oro') t = 'notte'; if (t === 'auto') t = (window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches) ? 'chiaro' : 'scuro'; return t; }
+function applyTheme() { document.body.setAttribute('data-theme', resolvedTheme()); var m = document.querySelector('meta[name=theme-color]'); if (m) m.setAttribute('content', resolvedTheme() === 'chiaro' ? '#F3F6FA' : '#000000'); }
+if (window.matchMedia) { try { matchMedia('(prefers-color-scheme: light)').addEventListener('change', function () { if (app.theme === 'auto') applyTheme(); }); } catch (e) {} }
 function navSync(hash) {
   app.skipHash = ('#' + hash) !== location.hash;
   if (app.skipHash) location.hash = hash;
@@ -2159,7 +2218,7 @@ window.addEventListener('hashchange', function () {
 function render(first) {
   if (!app.data) return;
   ['gabriele', 'valerio'].forEach(function (p) { PEOPLE[p] = person(p).name; });
-  document.body.setAttribute('data-theme', app.theme);
+  applyTheme();
   document.body.classList.toggle('collection', app.view === 'catalog' || app.view === 'card' || app.view === 'bundle');
   var y = window.scrollY, html = '';
   try {
@@ -3194,20 +3253,38 @@ function closePop(instant) {
   if (instant) pop.remove(); else { pop.classList.remove('in'); setTimeout(function () { pop.remove(); }, 180); }
   updateNav();
 }
+function settingsRow(label, help, body) { return '<div class="f set-row"><span class="l">' + label + (help ? '<small class="set-help">' + help + '</small>' : '') + '</span>' + body + '</div>'; }
 function openSettings() {
+  var pr = person(app.actor), email = (app.user && app.user.email) || '';
   openSheet({
-    title: 'Impostazioni', noActions: true,
-    body: '<div class="f"><span class="l">Tema</span>' + optGroup('theme-x', [['scuro', 'Scuro'], ['chiaro', 'Chiaro'], ['oro', 'Oro']], app.theme) + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">' + stChip('yes') + stChip('no') + stChip('unknown') + '</div></div>' +
-      '<div class="f"><span class="l">Suoni</span>' + optGroup('sound-x', [['1', 'Attivi'], ['0', 'Spenti']], lsGet('hq-sound', '1')) + '</div>' + (app.authed ? '' : '<div class="f"><span class="l">Questo telefono è di</span>' + optGroup('actor-x', [['gabriele', 'Gabriele'], ['valerio', 'Valerio']], app.actor) + '</div>') +
-      '<div class="f"><span class="l">Database</span><p class="muted" style="font-size:13.5px">' + (app.live ? 'Collegato a Firebase (gestionale-gabriele) · nodo slabhub/. Le modifiche arrivano subito all’altro telefono.' : 'Modalità prova: i dati restano in questo browser. Su GitHub Pages si collega da solo a Firebase.') + '</p></div>' +
+    title: 'Impostazioni', sub: 'Valgono su questo dispositivo', noActions: true,
+    body: '<p class="set-h">Aspetto</p>' +
+      settingsRow('Tema', 'Sistema segue il tema del telefono o del computer', optGroup('theme-x', THEMES, app.theme === 'oro' ? 'notte' : app.theme, function (o) { return '<i class="th-dot th-' + o[0] + '"></i>'; }, 'themes') + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">' + stChip('yes') + stChip('no') + stChip('unknown') + '</div>') +
+      settingsRow('Animazioni', 'Ridotte: niente transizioni di pagina e meno movimento', optGroup('motion-x', [['full', 'Complete'], ['lite', 'Ridotte']], lsGet('hq-motion', 'full'))) +
+      '<p class="set-h">Feedback</p>' +
+      settingsRow('Suoni', '', optGroup('sound-x', [['1', 'Attivi'], ['0', 'Spenti']], lsGet('hq-sound', '1'))) +
+      settingsRow('Vibrazione', 'Solo sul telefono, quando completi o sposti qualcosa', optGroup('haptic-x', [['1', 'Attiva'], ['0', 'Spenta']], lsGet('hq-haptic', '1'))) +
+      '<p class="set-h">Avvio</p>' +
+      settingsRow('Schermata iniziale', 'La sezione che si apre quando lanci HQ', optGroup('start-x', [['home', 'Home'], ['task', 'Task'], ['canali', 'Canali'], ['dashboard', 'Dashboard']], lsGet('hq-start', 'home'))) +
+      settingsRow('Novità in Home', 'Il blocco con quello che ha fatto l’altro da quando non apri HQ', optGroup('news-x', [['1', 'Mostra'], ['0', 'Nascondi']], lsGet('hq-news', '1'))) +
+      '<p class="set-h">Account</p>' +
+      (app.authed ? '<div class="f set-row set-acc">' + avatar(app.actor, 44) + '<div class="tx"><strong>' + esc(pr.name) + '</strong><small>' + esc(email || 'Accesso Google') + '</small></div><button type="button" class="btn sm" data-sact="logout">Esci</button></div>' : settingsRow('Questo telefono è di', '', optGroup('actor-x', [['gabriele', 'Gabriele'], ['valerio', 'Valerio']], app.actor))) +
+      '<p class="set-h">Dati</p>' +
+      '<div class="f set-row"><span class="l">Database</span><p class="muted" style="font-size:13.5px;margin:0">' + (app.live ? 'Firebase · progetto gestionale-gabriele · nodo slabhub/. Le modifiche arrivano subito all’altro dispositivo.' : 'Modalità prova: i dati restano in questo browser.') + '</p></div>' +
       (app.live ? '' : '<div class="f"><button type="button" class="btn sm" data-sact="reset">Ripristina i dati di partenza</button></div>') +
+      '<p class="set-foot">SlabHub HQ · ' + (app.live ? 'in produzione' : 'prova') + ' · hq.gamanstudio.it</p>' +
       '<div class="actions"><button type="button" class="btn" style="flex:1" data-sact="close">Chiudi</button></div>',
     onOpt: function (grp, val) {
-      if (grp === 'theme-x') { app.theme = val; lsSet('hq-theme', val); document.body.setAttribute('data-theme', val); }
+      if (grp === 'theme-x') { app.theme = val; lsSet('hq-theme', val); applyTheme(); Sfx.play('toggle'); }
+      if (grp === 'motion-x') { lsSet('hq-motion', val); reduceMotion = val === 'lite' || !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); document.documentElement.classList.toggle('motion-lite', val === 'lite'); }
       if (grp === 'sound-x') { lsSet('hq-sound', val); if (val === '1') Sfx.play('check'); }
+      if (grp === 'haptic-x') { lsSet('hq-haptic', val); if (val === '1') haptic(12); }
+      if (grp === 'start-x') lsSet('hq-start', val);
+      if (grp === 'news-x') { lsSet('hq-news', val); app.pendingRender = true; }
       if (grp === 'actor-x') { app.actor = val; lsSet('hq-actor', val); lsSet('hq-actor-set', '1'); app.pendingRender = true; }
     },
     onAction: function (act, el) {
+      if (act === 'logout') { closeSheet(true); if (app.signOut) app.signOut(); }
       if (act === 'reset') { if (el.getAttribute('data-sure') !== '1') { el.setAttribute('data-sure', '1'); el.textContent = 'Tocca di nuovo: si perdono le modifiche'; return; } app.data = buildSeed(); localSave(); closeSheet(true); render(true); toast('Dati ripristinati'); }
     }
   });
@@ -3410,7 +3487,7 @@ function openMeMenu(anchor) {
     '<button role="menuitem" data-pop="profilo-' + app.actor + '">' + I.home + '<span><strong>Il mio profilo</strong><small>Foto e le mie task</small></span></button>' +
     '<button role="menuitem" data-pop="profilo-' + other + '">' + avatar(other, 22) + '<span><strong>' + esc(po.name) + '</strong><small>' + esc(po.title || 'Profilo') + '</small></span></button>' +
     (app.authed ? '<button role="menuitem" data-pop="#logout">' + I.arrow + '<span><strong>Esci</strong><small>Da questo dispositivo</small></span></button>' : '<button role="menuitem" data-pop="#switch">' + I.arrow + '<span><strong>Cambia utente</strong><small>Su questo telefono</small></span></button>') +
-    '<button role="menuitem" data-pop="#settings">' + I.gear + '<span><strong>Impostazioni</strong><small>Tema, database</small></span></button></div>';
+    '<button role="menuitem" data-pop="#settings">' + I.gear + '<span><strong>Impostazioni</strong><small>Tema, suoni, avvio</small></span></button></div>';
   document.body.insertAdjacentHTML('beforeend', html);
   var pop = document.getElementById('pop'), r = anchor.getBoundingClientRect();
   pop.style.right = Math.max(12, window.innerWidth - r.right) + 'px';
@@ -4004,7 +4081,8 @@ document.addEventListener('input', function (e) {
 document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); });
 document.addEventListener('focusout', function () { setTimeout(function () { if (app.pendingRender && !isTyping() && !app.sheet && !drag) { app.pendingRender = false; render(); } }, 0); });
 
-document.body.setAttribute('data-theme', app.theme);
+applyTheme();
+if (!location.hash && lsGet('hq-start', 'home') !== 'home') location.replace('#' + lsGet('hq-start', 'home'));
 // sensazione da app: niente pinch-zoom né doppio tap per ingrandire (iOS ignora user-scalable)
 ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (ev) { document.addEventListener(ev, function (e) { e.preventDefault(); }, { passive: false }); });
 document.addEventListener('touchmove', function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
@@ -4693,7 +4771,7 @@ function openDashMonth(k) {
     } catch (e) {}
   };
 })();
-function haptic(p) { try { if (navigator.vibrate) navigator.vibrate(p || 10); } catch (e) {} }
+function haptic(p) { try { if (navigator.vibrate && lsGet('hq-haptic', '1') === '1') navigator.vibrate(p || 10); } catch (e) {} }
 
 /* toast con tipo: ok (verde), undo, warn (rosso) */
 var toastTimer2 = null;
@@ -4813,6 +4891,7 @@ function todayHtml() {
 
 /* ---------- cosa è cambiato da quando sei entrato ---------- */
 function newsHtml() {
+  if (lsGet('hq-news', '1') !== '1') return '';
   var since = app.seenFrom; if (!since) return '';
   var dism = lsGet('hq-news-dismiss-' + app.actor, '');
   var list = vals('activity').filter(function (a) { return a.actor && a.actor !== app.actor && a.at > since && a.at > dism; }).sort(function (a, b) { return a.at < b.at ? 1 : -1; });
@@ -5197,7 +5276,8 @@ function buildSide() {
     '<button class="side-logo" data-act="go" data-v="home" aria-label="Home"><svg class="logo" viewBox="0 0 973.2 426.5" fill="currentColor"><use href="#slabhub-logo" width="973.2" height="426.5"/></svg><i class="side-mark">H</i></button>' +
     '<nav class="side-nav"><i class="side-ind" aria-hidden="true"></i>' + SIDE_ITEMS.map(function (s) { return '<div class="side-grp" data-grp="' + s[0] + '"><button data-side="' + s[0] + '" data-act="go" data-v="' + s[1] + '" title="' + s[2] + '">' + I[s[3]] + '<span>' + s[2] + '</span><b class="side-badge" hidden></b></button><div class="side-sub" role="group"></div></div>'; }).join('') + '</nav>' +
     '<div class="side-foot"><button data-act="phase-editor" title="Fasi dei prodotti">' + I.stDoing + '<span>Fasi</span></button><button data-act="settings" title="Impostazioni">' + I.gear + '<span>Impostazioni</span></button>' +
-    '<button class="side-tog" data-act="side-toggle" title="' + (col ? 'Allarga' : 'Restringi') + '" aria-label="Allarga o restringi la barra">' + I.chev + '</button></div></aside>';
+    '<button class="side-tog" data-act="side-toggle" title="' + (col ? 'Allarga' : 'Restringi') + '" aria-label="Allarga o restringi la barra">' + I.chev + '</button>' +
+    '<button class="side-me" data-act="me-menu" aria-label="Profilo"></button></div></aside>';
   document.body.insertAdjacentHTML('afterbegin', html);
   document.documentElement.classList.toggle('side-col', col);
 }
@@ -5275,8 +5355,13 @@ function sideSub(v) {
     });
   }
 }
+function sideMeHtml() {
+  var pr = person(app.actor);
+  return avatar(app.actor, 38) + '<span class="me-tx"><strong>' + esc(pr.name) + '</strong><small>' + esc(pr.title ? pr.title + (pr.titleLong ? ' · ' + pr.titleLong : '') : 'Profilo') + '</small></span><i class="me-dots">' + I.more + '</i>';
+}
 function updateSide() {
   var side = document.getElementById('side'); if (!side) return;
+  var me = side.querySelector('.side-me'); if (me) { var mh = sideMeHtml(); if (me.innerHTML !== mh) me.innerHTML = mh; }
   var cur = sideCur(), bd = sideBadges(), onBtn = null;
   side.querySelectorAll('[data-side]').forEach(function (b) {
     var k = b.getAttribute('data-side'), on = k === cur; b.classList.toggle('on', on); if (on) onBtn = b;
@@ -5294,6 +5379,18 @@ function toggleSide() {
   Sfx.play('toggle'); setTimeout(updateSide, 320);
 }
 buildSide();
+(function () {
+  /* il menu del profilo, aperto dalla barra laterale, sale dal basso a sinistra */
+  var baseMe = openMeMenu;
+  openMeMenu = function (anchor) {
+    baseMe(anchor);
+    var pop = document.getElementById('pop'); if (!pop || !anchor || !anchor.closest('.side')) return;
+    var r = anchor.getBoundingClientRect();
+    pop.classList.remove('down'); pop.classList.add('up', 'from-side');
+    pop.style.right = 'auto'; pop.style.top = 'auto'; pop.style.left = (r.right + 10) + 'px'; pop.style.bottom = Math.max(12, window.innerHeight - r.bottom) + 'px';
+    pop.style.transformOrigin = '0 100%';
+  };
+})();
 (function () {
   var base = updateNav; updateNav = function () { base(); updateSide(); };
   window.addEventListener('resize', function () { updateSide(); });
