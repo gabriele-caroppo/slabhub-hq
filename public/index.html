@@ -1654,9 +1654,57 @@ html.lg-refract .sheet,html.lg-refract .pop,html.lg-refract .ctx,html.lg-refract
 [data-theme="chiaro"] .sheet,[data-theme="chiaro"] .pop,[data-theme="chiaro"] .ctx,[data-theme="chiaro"] .gs-box{background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.8))!important;border-color:rgba(10,17,27,.1)!important;box-shadow:inset 0 1px 0 #fff,var(--shadow)!important}
 [data-theme="notte"] .side{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0) 40%),rgba(0,0,0,.6)!important}
 [data-theme="notte"] .top{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,0)),rgba(0,0,0,.55)!important}
+
+/* menu profilo: intestazione cliccabile = il mio profilo */
+.pop-me{width:100%;text-align:left;cursor:pointer;border-radius:16px 16px 6px 6px;transition:background .2s}
+.pop-me:hover{background:color-mix(in srgb,var(--text) 5%,transparent)}
+.pop-me .pop-me-tx{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.pop-me .pop-hint{font:600 11px/1 Inter;color:var(--accent-2);margin-top:2px}
+.pop-me .pop-me-arr{display:flex;color:var(--faint);transition:transform .3s var(--spring),color .2s}.pop-me .pop-me-arr svg{width:18px;height:18px}
+.pop-me:hover .pop-me-arr{color:var(--text);transform:translateX(3px)}
+.pop .pop-out{margin-top:4px;border-top:1px solid var(--line-soft);border-radius:6px 6px 16px 16px}
+.pop .pop-out svg{transform:rotate(45deg)}
+
+
+/* ===================== APP SHELL + SCENA DI VETRO (21/11) =====================
+   #scene occupa la finestra; la barra in alto e quella in basso sono fisse nella scena;
+   #app è il pannello che scorre tra le due. Con il vetro attivo (html.lg-on) #scene è un <liquid-glass>
+   con l'aurora del brand sotto, e barre, ricerca e barra laterale sono lastre [glass]. */
+:root{--toph:calc(64px + var(--safe-t));--navh:calc(96px + var(--safe-b))}
+html,body{height:100%;overflow:hidden!important;overscroll-behavior:none}
+.scene{position:fixed;inset:0;display:block;min-height:0!important;overflow:hidden;background:var(--bg)!important;color:inherit!important;isolation:isolate}
+.scene::part(content){height:100%}
+.scene::part(canvas){opacity:1}
+.top{position:absolute!important;top:0;left:0;right:0;z-index:30;height:var(--toph);box-sizing:border-box}
+main#app{position:absolute;left:0;right:0;top:var(--toph);bottom:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;max-width:none;margin:0;padding-top:22px;scrollbar-gutter:stable}
+main#app>*{max-width:1180px;margin-left:auto;margin-right:auto}
+@media (max-width:899px){
+  main#app{bottom:0;padding-bottom:var(--navh)}
+  html.lg-on main#app{bottom:var(--navh);padding-bottom:24px}
+}
+@media (min-width:900px){
+  main#app{left:var(--sidew);right:0;padding-left:max(32px,calc((100vw - var(--sidew) - 1180px)/2));padding-right:max(32px,calc((100vw - var(--sidew) - 1180px)/2));margin-left:0!important;padding-bottom:60px}
+  .side{position:absolute!important}
+  .top{left:var(--sidew)!important;padding-left:24px!important;transition:left .32s cubic-bezier(.2,.8,.2,1),padding .32s cubic-bezier(.2,.8,.2,1)}
+  html.lg-on .top[glass]{border-radius:0 0 0 22px}
+}
+@media (min-width:1800px){main#app{padding-left:max(32px,calc((100vw - var(--sidew) - 1440px)/2));padding-right:max(32px,calc((100vw - var(--sidew) - 1440px)/2))}}
+/* vetro vero: gli elementi [glass] non hanno sfondo proprio (lo disegna la scena) */
+html.lg-on .top[glass],html.lg-on .bnav[glass],html.lg-on .side[glass]{background:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-color:transparent!important;box-shadow:none!important}
+html.lg-on .side[glass]::after{display:none}
+html.lg-on .top[glass]{--glass-depth:.9;--glass-dome:.6;--glass-frost:.42;--glass-tint:rgba(10,30,60,.35);--glass-pull:0;--glass-press:1;--glass-shadow:.35;--glass-chroma:.004;border-radius:0 0 22px 22px}
+html.lg-on .bnav[glass]{--glass-depth:1.3;--glass-dome:1;--glass-frost:.4;--glass-tint:rgba(10,30,60,.38);--glass-pull:10;--glass-press:1;--glass-shadow:.9;--glass-chroma:.006}
+html.lg-on .side[glass]{--glass-depth:.9;--glass-dome:.5;--glass-frost:.5;--glass-tint:rgba(8,22,44,.42);--glass-pull:0;--glass-press:1;--glass-shadow:.4;--glass-chroma:.003;border-radius:0 28px 28px 0}
+html.lg-on .gs-btn[glass]{background:transparent!important;border-color:transparent!important;--glass-depth:1.2;--glass-dome:1.1;--glass-frost:.2;--glass-tint:rgba(255,255,255,.08);--glass-pull:8;--glass-press:1.03;--glass-shadow:.5}
+html.lg-on .top{border-bottom:0!important}
+html.lg-on .side-ind{background:linear-gradient(90deg,rgba(26,140,255,.3),rgba(26,140,255,.1))}
+html.lg-on main#app{scrollbar-color:rgba(255,255,255,.18) transparent}
+/* la scena è già sotto tutto: il body non deve più dipingere lo sfondo di pagina */
+html.lg-on body{background:transparent!important}
 </style>
 </head>
 <body data-theme="scuro">
+<div id="scene" class="scene">
 <header class="top">
   <button data-act="go" data-v="home" aria-label="Home" style="display:flex"><svg class="logo" viewBox="0 0 973.2 426.5" fill="currentColor" role="img" aria-label="SlabHub"><use href="#slabhub-logo" width="973.2" height="426.5"/></svg></button>
   <span class="grow"></span>
@@ -1664,6 +1712,7 @@ html.lg-refract .sheet,html.lg-refract .pop,html.lg-refract .ctx,html.lg-refract
 </header>
 <main id="app"><div class="skel"><i class="sk sk-h"></i><i class="sk sk-b"></i><i class="sk sk-b"></i><i class="sk sk-b sm"></i></div></main>
 <nav class="bnav" id="bnav" aria-label="Sezioni"></nav>
+</div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <!-- Logo ufficiale (claude/slabhub-logo.svg), non ridisegnato -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -3148,17 +3197,36 @@ function route() {
   else if (h.indexOf('canale-') === 0) { app.view = 'channel'; app.param = h.slice(7); }
   else { app.view = { task: 'tasks', catalogo: 'catalog', uscite: 'releases', canali: 'channels', finanze: 'finance', cronologia: 'log', idee: 'ideas', dashboard: 'dash' }[h] || 'home'; app.param = ''; }
 }
+/* il contenuto scorre dentro #app (pannello tra le barre), non nella finestra */
+function mainEl() { return document.getElementById('app'); }
+function mainScrollY() { var m = mainEl(); return m ? m.scrollTop : 0; }
+function scrollMain(y) { var m = mainEl(); if (m) m.scrollTop = y; }
+function scrollMainBy(d) { var m = mainEl(); if (m) m.scrollTop += d; }
+/* vetro liquido (WebGL) sull'intera app: la scena sostituisce il contenitore #scene prima del primo render */
+function glassWanted() { return lsGet('hq-glass', '1') === '1' && resolvedTheme() !== 'chiaro'; }
+function bootGlassScene() {
+  var sc = document.getElementById('scene'); if (!sc) return;
+  var want = glassWanted(), isLG = sc.tagName.toLowerCase() === 'liquid-glass';
+  if (want === isLG) { if (isLG) sc.setAttribute('dim', resolvedTheme() === 'notte' ? '.86' : '.74'); return; }
+  var el = document.createElement(want ? 'liquid-glass' : 'div');
+  if (want) { el.setAttribute('backdrop', 'aurora'); el.setAttribute('colors', '#1A8CFF #0A2A4F #3AA0FF #04162E'); el.setAttribute('dim', resolvedTheme() === 'notte' ? '.86' : '.74'); if (reduceMotion) el.setAttribute('reduce-motion', ''); }
+  el.id = 'scene'; el.className = 'scene';
+  while (sc.firstChild) el.appendChild(sc.firstChild);
+  sc.parentNode.replaceChild(el, sc);
+  document.documentElement.classList.toggle('lg-on', want);
+  ['.top', '.bnav', '.side', '.gs-btn'].forEach(function (q) { document.querySelectorAll(q).forEach(function (n) { if (want) n.setAttribute('glass', ''); else n.removeAttribute('glass'); }); });
+}
 var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 if (lsGet('hq-motion', 'full') === 'lite') { reduceMotion = true; document.documentElement.classList.add('motion-lite'); }
 /* tema: 'auto' segue il sistema (chiaro di giorno se il sistema è chiaro, altrimenti scuro) */
 var THEMES = [['scuro', 'Scuro'], ['chiaro', 'Chiaro'], ['notte', 'Notte'], ['auto', 'Sistema']];
 function resolvedTheme() { var t = app.theme; if (t === 'oro') t = 'notte'; if (t === 'auto') t = (window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches) ? 'chiaro' : 'scuro'; return t; }
-function applyTheme() { document.body.setAttribute('data-theme', resolvedTheme()); var m = document.querySelector('meta[name=theme-color]'); if (m) m.setAttribute('content', resolvedTheme() === 'chiaro' ? '#F3F6FA' : '#000000'); }
+function applyTheme() { document.body.setAttribute('data-theme', resolvedTheme()); if (typeof bootGlassScene === 'function') bootGlassScene(); var m = document.querySelector('meta[name=theme-color]'); if (m) m.setAttribute('content', resolvedTheme() === 'chiaro' ? '#F3F6FA' : '#000000'); }
 if (window.matchMedia) { try { matchMedia('(prefers-color-scheme: light)').addEventListener('change', function () { if (app.theme === 'auto') applyTheme(); }); } catch (e) {} }
 function navSync(hash) {
   app.skipHash = ('#' + hash) !== location.hash;
   if (app.skipHash) location.hash = hash;
-  route(); closeSheet(true); closePop(true); render(true); window.scrollTo(0, 0);
+  route(); closeSheet(true); closePop(true); render(true); scrollMain(0);
 }
 function go(hash) {
   if (document.startViewTransition && !reduceMotion) { document.documentElement.classList.add('vt-page'); var vt = document.startViewTransition(function () { navSync(hash); }); vt.finished.catch(function () {}).then(function () { document.documentElement.classList.remove('vt-page'); }); }
@@ -3166,7 +3234,7 @@ function go(hash) {
 }
 window.addEventListener('hashchange', function () {
   if (app.skipHash) { app.skipHash = false; return; }
-  route(); closeSheet(true); closePop(true); render(true); window.scrollTo(0, 0);
+  route(); closeSheet(true); closePop(true); render(true); scrollMain(0);
 });
 
 /* ---------- render principale ---------- */
@@ -3175,7 +3243,7 @@ function render(first) {
   ['gabriele', 'valerio'].forEach(function (p) { PEOPLE[p] = person(p).name; });
   applyTheme();
   document.body.classList.toggle('collection', app.view === 'catalog' || app.view === 'card' || app.view === 'bundle');
-  var y = window.scrollY, html = '';
+  var y = mainScrollY(), html = '';
   try {
     if (app.view === 'home') html = viewHome();
     else if (app.view === 'tasks') html = viewTasks();
@@ -3201,7 +3269,7 @@ function render(first) {
   updateNav();
   positionPill();
   animateProg();
-  if (!first) window.scrollTo(0, y);
+  if (!first) scrollMain(y);
   if (first) { countUp(); main.classList.remove('drawn'); requestAnimationFrame(function () { requestAnimationFrame(function () { main.classList.add('drawn'); }); }); }
   else main.classList.add('drawn');
 }
@@ -4216,6 +4284,7 @@ function openSettings() {
     body: '<p class="set-h">Aspetto</p>' +
       settingsRow('Tema', 'Sistema segue il tema del telefono o del computer', optGroup('theme-x', THEMES, app.theme === 'oro' ? 'notte' : app.theme, function (o) { return '<i class="th-dot th-' + o[0] + '"></i>'; }, 'themes') + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">' + stChip('yes') + stChip('no') + stChip('unknown') + '</div>') +
       settingsRow('Animazioni', 'Ridotte: niente transizioni di pagina e meno movimento', optGroup('motion-x', [['full', 'Complete'], ['lite', 'Ridotte']], lsGet('hq-motion', 'full'))) +
+      settingsRow('Vetro liquido', 'Barre e pulsanti come lastre di vetro vere (WebGL). Spegnilo se il dispositivo scalda o la batteria dura poco. Non attivo col tema Chiaro.', optGroup('glass-x', [['1', 'Attivo'], ['0', 'Spento']], lsGet('hq-glass', '1'))) +
       '<p class="set-h">Feedback</p>' +
       settingsRow('Suoni', '', optGroup('sound-x', [['1', 'Attivi'], ['0', 'Spenti']], lsGet('hq-sound', '1'))) +
       settingsRow('Vibrazione', 'Solo sul telefono, quando completi o sposti qualcosa', optGroup('haptic-x', [['1', 'Attiva'], ['0', 'Spenta']], lsGet('hq-haptic', '1'))) +
@@ -4231,6 +4300,7 @@ function openSettings() {
       '<div class="actions"><button type="button" class="btn" style="flex:1" data-sact="close">Chiudi</button></div>',
     onOpt: function (grp, val) {
       if (grp === 'theme-x') { app.theme = val; lsSet('hq-theme', val); applyTheme(); Sfx.play('toggle'); }
+      if (grp === 'glass-x') { lsSet('hq-glass', val); bootGlassScene(); Sfx.play('toggle'); }
       if (grp === 'motion-x') { lsSet('hq-motion', val); reduceMotion = val === 'lite' || !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); document.documentElement.classList.toggle('motion-lite', val === 'lite'); }
       if (grp === 'sound-x') { lsSet('hq-sound', val); if (val === '1') Sfx.play('check'); }
       if (grp === 'haptic-x') { lsSet('hq-haptic', val); if (val === '1') haptic(12); }
@@ -4329,7 +4399,7 @@ document.addEventListener('pointermove', function (e) {
   drag.lx = e.clientX; drag.ly = e.clientY;
   drag.ghost.style.left = (e.clientX - drag.dx) + 'px'; drag.ghost.style.top = (e.clientY - drag.dy) + 'px';
   clearOver(); var t = dropTargetAt(e.clientX, e.clientY); if (t) t.classList.add('over');
-  if (drag.type === 'mouse') { if (e.clientY < 90) window.scrollBy(0, -12); else if (e.clientY > window.innerHeight - 110 && !t) window.scrollBy(0, 12); }
+  if (drag.type === 'mouse') { if (e.clientY < 90) scrollMainBy(-12); else if (e.clientY > window.innerHeight - 110 && !t) scrollMainBy(12); }
 }, { passive: false });
 document.addEventListener('touchmove', function (e) { if (drag && drag.started) e.preventDefault(); }, { passive: false });
 function endDrag(e, cancelled) {
@@ -4438,11 +4508,10 @@ function openMeMenu(anchor) {
   if (document.getElementById('pop')) { closePop(); return; }
   var pr = person(app.actor), other = app.actor === 'gabriele' ? 'valerio' : 'gabriele', po = person(other);
   var html = '<div class="pop-back" id="pop-back"></div><div class="pop down" id="pop" role="menu">' +
-    '<div class="pop-me">' + avatar(app.actor, 52, 'big') + '<div><strong>' + esc(pr.name) + '</strong>' + (pr.title ? '<small class="pop-title">' + esc(pr.title) + ' · ' + esc(pr.titleLong || '') + '</small>' : '') + '</div></div>' +
-    '<button role="menuitem" data-pop="profilo-' + app.actor + '">' + I.home + '<span><strong>Il mio profilo</strong><small>Foto e le mie task</small></span></button>' +
+    '<button class="pop-me" role="menuitem" data-pop="profilo-' + app.actor + '" title="Il mio profilo">' + avatar(app.actor, 52, 'big') + '<span class="pop-me-tx"><strong>' + esc(pr.name) + '</strong>' + (pr.title ? '<small class="pop-title">' + esc(pr.title) + ' · ' + esc(pr.titleLong || '') + '</small>' : '') + '<small class="pop-hint">Apri il mio profilo</small></span><i class="pop-me-arr">' + I.arrow + '</i></button>' +
     '<button role="menuitem" data-pop="profilo-' + other + '">' + avatar(other, 22) + '<span><strong>' + esc(po.name) + '</strong><small>' + esc(po.title || 'Profilo') + '</small></span></button>' +
-    (app.authed ? '<button role="menuitem" data-pop="#logout">' + I.arrow + '<span><strong>Esci</strong><small>Da questo dispositivo</small></span></button>' : '<button role="menuitem" data-pop="#switch">' + I.arrow + '<span><strong>Cambia utente</strong><small>Su questo telefono</small></span></button>') +
-    '<button role="menuitem" data-pop="#settings">' + I.gear + '<span><strong>Impostazioni</strong><small>Tema, suoni, avvio</small></span></button></div>';
+    '<button role="menuitem" data-pop="#settings">' + I.gear + '<span><strong>Impostazioni</strong><small>Tema, suoni, avvio</small></span></button>' +
+    (app.authed ? '<button role="menuitem" class="pop-out" data-pop="#logout">' + I.arrow + '<span><strong>Esci</strong><small>Da questo dispositivo</small></span></button>' : '<button role="menuitem" class="pop-out" data-pop="#switch">' + I.arrow + '<span><strong>Cambia utente</strong><small>Su questo telefono</small></span></button>') + '</div>';
   document.body.insertAdjacentHTML('beforeend', html);
   var pop = document.getElementById('pop'), r = anchor.getBoundingClientRect();
   pop.style.right = Math.max(12, window.innerWidth - r.right) + 'px';
@@ -5935,6 +6004,7 @@ document.addEventListener('keydown', function (e) {
 (function () {
   var who = document.getElementById('who'); if (!who) return;
   who.insertAdjacentHTML('beforebegin', '<button class="gs-btn" data-act="search" aria-label="Cerca" title="Cerca (⌘K)">' + I.search + '<span>Cerca</span><kbd>⌘K</kbd></button>');
+  if (document.documentElement.classList.contains('lg-on')) who.previousElementSibling.setAttribute('glass', '');
 })();
 
 /* ---------- AZIONI RAPIDE ---------- */
@@ -6233,7 +6303,8 @@ function buildSide() {
     '<div class="side-foot"><button data-act="phase-editor" title="Fasi dei prodotti">' + I.stDoing + '<span>Fasi</span></button><button data-act="settings" title="Impostazioni">' + I.gear + '<span>Impostazioni</span></button>' +
     '<button class="side-tog" data-act="side-toggle" title="' + (col ? 'Allarga' : 'Restringi') + '" aria-label="Allarga o restringi la barra">' + I.chev + '</button>' +
     '<button class="side-me" data-act="me-menu" aria-label="Profilo"></button></div></aside>';
-  document.body.insertAdjacentHTML('afterbegin', html);
+  var host = document.getElementById('scene') || document.body; host.insertAdjacentHTML('afterbegin', html);
+  if (document.documentElement.classList.contains('lg-on')) document.getElementById('side').setAttribute('glass', '');
   document.documentElement.classList.toggle('side-col', col);
 }
 /* Icone delle sottosezioni (stesso tratto delle icone principali) */
