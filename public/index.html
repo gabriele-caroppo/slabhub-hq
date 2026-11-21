@@ -1639,15 +1639,11 @@ html.motion-lite .skel,html.motion-lite .aur,html.motion-lite .g-halo{animation:
 /* vetro CSS per la cromatura dell'app */
 .side,.top,.bnav,.sheet,.pop,.ctx,.toast{--lg-blur:22px}
 .side{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.012) 40%,rgba(255,255,255,0)),color-mix(in srgb,var(--surface) 62%,transparent)!important;-webkit-backdrop-filter:blur(var(--lg-blur)) saturate(170%) brightness(1.04);backdrop-filter:blur(var(--lg-blur)) saturate(170%) brightness(1.04);box-shadow:inset -1px 0 0 rgba(255,255,255,.06),inset 0 1px 0 rgba(255,255,255,.1),16px 0 50px -30px rgba(0,0,0,.6)}
-.side::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.09),transparent 120px),linear-gradient(90deg,transparent,rgba(255,255,255,.035) 96%,rgba(255,255,255,.12));mask:linear-gradient(90deg,rgba(0,0,0,.5),#000);-webkit-mask:linear-gradient(90deg,rgba(0,0,0,.5),#000);opacity:.8}
+.side::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.06),transparent 140px);opacity:.8}
 .top{background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.015)),color-mix(in srgb,var(--bg) 46%,transparent)!important;-webkit-backdrop-filter:blur(var(--lg-blur)) saturate(180%) brightness(1.05);backdrop-filter:blur(var(--lg-blur)) saturate(180%) brightness(1.05);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 -1px 0 rgba(255,255,255,.04),0 10px 30px -20px rgba(0,0,0,.6);border-bottom:1px solid rgba(255,255,255,.08)!important}
 .bnav{-webkit-backdrop-filter:blur(26px) saturate(190%) brightness(1.06)!important;backdrop-filter:blur(26px) saturate(190%) brightness(1.06)!important}
 .sheet,.pop,.ctx{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.015) 60%),color-mix(in srgb,var(--surface) 78%,transparent)!important;-webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);border-color:rgba(255,255,255,.14)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 0 0 1px rgba(255,255,255,.03),var(--shadow)!important}
 .toast{-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 14px 34px -14px rgba(0,0,0,.6)}
-/* rifrazione reale del contenuto (solo Chromium desktop: backdrop-filter con filtro SVG) */
-html.lg-refract .side{-webkit-backdrop-filter:url(#lg-dist) blur(var(--lg-blur)) saturate(170%) brightness(1.04);backdrop-filter:url(#lg-dist) blur(var(--lg-blur)) saturate(170%) brightness(1.04)}
-html.lg-refract .top{-webkit-backdrop-filter:url(#lg-dist) blur(var(--lg-blur)) saturate(180%) brightness(1.05);backdrop-filter:url(#lg-dist) blur(var(--lg-blur)) saturate(180%) brightness(1.05)}
-html.lg-refract .sheet,html.lg-refract .pop,html.lg-refract .ctx,html.lg-refract .gs-box{-webkit-backdrop-filter:url(#lg-dist) blur(30px) saturate(180%);backdrop-filter:url(#lg-dist) blur(30px) saturate(180%)}
 [data-theme="chiaro"] .side{background:linear-gradient(180deg,rgba(255,255,255,.75),rgba(255,255,255,.45))!important;box-shadow:inset -1px 0 0 rgba(10,17,27,.06),inset 0 1px 0 #fff,16px 0 50px -30px rgba(10,30,60,.3)}
 [data-theme="chiaro"] .side::after{background:linear-gradient(180deg,rgba(255,255,255,.9),transparent 120px);opacity:.6}
 [data-theme="chiaro"] .top{background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.35))!important;box-shadow:inset 0 1px 0 #fff,0 10px 30px -22px rgba(10,30,60,.35);border-bottom-color:rgba(10,17,27,.08)!important}
@@ -1666,45 +1662,9 @@ html.lg-refract .sheet,html.lg-refract .pop,html.lg-refract .ctx,html.lg-refract
 .pop .pop-out svg{transform:rotate(45deg)}
 
 
-/* ===================== APP SHELL + SCENA DI VETRO (21/11) =====================
-   #scene occupa la finestra; la barra in alto e quella in basso sono fisse nella scena;
-   #app è il pannello che scorre tra le due. Con il vetro attivo (html.lg-on) #scene è un <liquid-glass>
-   con l'aurora del brand sotto, e barre, ricerca e barra laterale sono lastre [glass]. */
-:root{--toph:calc(64px + var(--safe-t));--navh:calc(96px + var(--safe-b))}
-html,body{height:100%;overflow:hidden!important;overscroll-behavior:none}
-.scene{position:fixed;inset:0;display:block;min-height:0!important;overflow:hidden;background:var(--bg)!important;color:inherit!important;isolation:isolate}
-.scene::part(content){height:100%}
-.scene::part(canvas){opacity:1}
-.top{position:absolute!important;top:0;left:0;right:0;z-index:30;height:var(--toph);box-sizing:border-box}
-main#app{position:absolute;left:0;right:0;top:var(--toph);bottom:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;max-width:none;margin:0;padding-top:22px;scrollbar-gutter:stable}
-main#app>*{max-width:1180px;margin-left:auto;margin-right:auto}
-@media (max-width:899px){
-  main#app{bottom:0;padding-bottom:var(--navh)}
-  html.lg-on main#app{bottom:var(--navh);padding-bottom:24px}
-}
-@media (min-width:900px){
-  main#app{left:var(--sidew);right:0;padding-left:max(32px,calc((100vw - var(--sidew) - 1180px)/2));padding-right:max(32px,calc((100vw - var(--sidew) - 1180px)/2));margin-left:0!important;padding-bottom:60px}
-  .side{position:absolute!important}
-  .top{left:var(--sidew)!important;padding-left:24px!important;transition:left .32s cubic-bezier(.2,.8,.2,1),padding .32s cubic-bezier(.2,.8,.2,1)}
-  html.lg-on .top[glass]{border-radius:0 0 0 22px}
-}
-@media (min-width:1800px){main#app{padding-left:max(32px,calc((100vw - var(--sidew) - 1440px)/2));padding-right:max(32px,calc((100vw - var(--sidew) - 1440px)/2))}}
-/* vetro vero: gli elementi [glass] non hanno sfondo proprio (lo disegna la scena) */
-html.lg-on .top[glass],html.lg-on .bnav[glass],html.lg-on .side[glass]{background:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-color:transparent!important;box-shadow:none!important}
-html.lg-on .side[glass]::after{display:none}
-html.lg-on .top[glass]{--glass-depth:.9;--glass-dome:.6;--glass-frost:.42;--glass-tint:rgba(10,30,60,.35);--glass-pull:0;--glass-press:1;--glass-shadow:.35;--glass-chroma:.004;border-radius:0 0 22px 22px}
-html.lg-on .bnav[glass]{--glass-depth:1.3;--glass-dome:1;--glass-frost:.4;--glass-tint:rgba(10,30,60,.38);--glass-pull:10;--glass-press:1;--glass-shadow:.9;--glass-chroma:.006}
-html.lg-on .side[glass]{--glass-depth:.9;--glass-dome:.5;--glass-frost:.5;--glass-tint:rgba(8,22,44,.42);--glass-pull:0;--glass-press:1;--glass-shadow:.4;--glass-chroma:.003;border-radius:0 28px 28px 0}
-html.lg-on .gs-btn[glass]{background:transparent!important;border-color:transparent!important;--glass-depth:1.2;--glass-dome:1.1;--glass-frost:.2;--glass-tint:rgba(255,255,255,.08);--glass-pull:8;--glass-press:1.03;--glass-shadow:.5}
-html.lg-on .top{border-bottom:0!important}
-html.lg-on .side-ind{background:linear-gradient(90deg,rgba(26,140,255,.3),rgba(26,140,255,.1))}
-html.lg-on main#app{scrollbar-color:rgba(255,255,255,.18) transparent}
-/* la scena è già sotto tutto: il body non deve più dipingere lo sfondo di pagina */
-html.lg-on body{background:transparent!important}
 </style>
 </head>
 <body data-theme="scuro">
-<div id="scene" class="scene">
 <header class="top">
   <button data-act="go" data-v="home" aria-label="Home" style="display:flex"><svg class="logo" viewBox="0 0 973.2 426.5" fill="currentColor" role="img" aria-label="SlabHub"><use href="#slabhub-logo" width="973.2" height="426.5"/></svg></button>
   <span class="grow"></span>
@@ -1712,11 +1672,9 @@ html.lg-on body{background:transparent!important}
 </header>
 <main id="app"><div class="skel"><i class="sk sk-h"></i><i class="sk sk-b"></i><i class="sk sk-b"></i><i class="sk sk-b sm"></i></div></main>
 <nav class="bnav" id="bnav" aria-label="Sezioni"></nav>
-</div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <!-- Logo ufficiale (claude/slabhub-logo.svg), non ridisegnato -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-<filter id="lg-dist" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="0.006 0.012" numOctaves="2" seed="7" result="n"/><feGaussianBlur in="n" stdDeviation="4" result="nb"/><feDisplacementMap in="SourceGraphic" in2="nb" scale="18" xChannelSelector="R" yChannelSelector="G"/></filter>
 <filter id="goo" x="-20%" y="-60%" width="140%" height="220%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur"/><feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -11" result="goo"/><feComposite in="SourceGraphic" in2="goo" operator="atop"/></filter>
 <symbol id="slabhub-logo" viewBox="472.4 229.9 973.2 426.5">
 <path d="M 493.03125 499.722656 C 493.425781 502.007812 493.988281 504.242188 494.722656 506.410156 C 496.300781 511.085938 498.535156 515.382812 501.375 519.1875 C 504.234375 523.019531 507.691406 526.410156 511.648438 529.269531 C 515.574219 532.113281 519.890625 534.285156 524.480469 535.734375 L 524.601562 535.773438 C 528.90625 537.207031 533.53125 537.933594 538.359375 537.933594 C 544.652344 537.933594 550.640625 536.714844 556.167969 534.3125 C 561.785156 531.871094 566.757812 528.507812 570.949219 524.3125 C 575.140625 520.125 578.503906 515.152344 580.949219 509.53125 C 583.355469 504.003906 584.574219 498.011719 584.574219 491.722656 L 584.574219 474.363281 C 584.574219 472.011719 584.363281 469.683594 583.953125 467.453125 C 583.507812 465.039062 582.964844 462.664062 582.34375 460.394531 C 580.390625 454.492188 577.390625 449.121094 573.425781 444.425781 C 569.410156 439.8125 564.558594 436.019531 559.007812 433.148438 C 553.601562 430.359375 547.585938 428.75 541.128906 428.363281 L 535.574219 428.363281 L 535.574219 428.242188 C 529.75 427.492188 524.71875 424.875 520.609375 420.457031 C 516.335938 415.875 514.074219 410.136719 514.074219 403.863281 L 514.074219 386.507812 C 514.074219 379.886719 516.492188 373.914062 521.066406 369.234375 C 525.6875 364.507812 531.667969 362.007812 538.359375 362.007812 C 545.011719 362.007812 551.007812 364.484375 555.695312 369.171875 C 558.410156 371.886719 560.382812 375.039062 561.5625 378.507812 L 583.886719 378.507812 C 583.292969 375.109375 582.3125 371.828125 580.949219 368.695312 C 578.503906 363.078125 575.140625 358.101562 570.949219 353.914062 C 566.765625 349.726562 561.789062 346.363281 556.164062 343.914062 C 550.636719 341.511719 544.644531 340.292969 538.359375 340.292969 C 536 340.292969 533.679688 340.5 531.449219 340.910156 C 529.027344 341.359375 526.636719 341.90625 524.347656 342.535156 C 519.816406 343.980469 515.542969 346.140625 511.652344 348.953125 C 507.6875 351.824219 504.230469 355.214844 501.378906 359.039062 C 498.539062 362.84375 496.300781 367.140625 494.722656 371.8125 C 493.152344 376.464844 492.359375 381.40625 492.359375 386.507812 L 492.359375 403.863281 C 492.359375 408.832031 493.085938 413.53125 494.519531 417.832031 L 494.566406 417.976562 C 496.378906 423.777344 499.390625 429.179688 503.523438 434.039062 C 509.035156 440.53125 515.917969 445.0625 524.570312 447.90625 C 528.226562 449.128906 532.128906 449.839844 536.210938 450.039062 C 536.886719 449.921875 537.601562 449.863281 538.359375 449.863281 C 539.449219 449.863281 540.421875 449.960938 541.3125 450.167969 C 547.234375 450.871094 552.320312 453.464844 556.429688 457.875 C 560.695312 462.472656 562.859375 468.015625 562.859375 474.363281 L 562.859375 491.722656 C 562.859375 498.375 560.378906 504.371094 555.691406 509.054688 C 551.007812 513.742188 545.011719 516.222656 538.359375 516.222656 C 531.667969 516.222656 525.6875 513.71875 521.0625 508.988281 C 518.425781 506.289062 516.503906 503.160156 515.347656 499.722656 Z M 538.359375 553.933594 C 531.832031 553.933594 525.523438 552.9375 519.605469 550.972656 C 513.398438 549.007812 507.566406 546.070312 502.273438 542.238281 C 497 538.425781 492.382812 533.886719 488.554688 528.753906 C 484.703125 523.59375 481.679688 517.800781 479.5625 511.527344 C 477.4375 505.238281 476.359375 498.570312 476.359375 491.722656 L 476.359375 483.722656 L 530.074219 483.722656 L 530.074219 491.722656 C 530.074219 494.207031 530.824219 496.085938 532.503906 497.804688 C 534.140625 499.476562 535.941406 500.222656 538.359375 500.222656 C 540.808594 500.222656 542.664062 499.457031 544.378906 497.742188 C 546.09375 496.027344 546.859375 494.171875 546.859375 491.722656 L 546.859375 474.363281 C 546.859375 472.09375 546.195312 470.371094 544.710938 468.773438 C 543.269531 467.222656 541.636719 466.359375 539.601562 466.078125 L 538.84375 466.128906 L 536.859375 466.074219 C 530.804688 465.914062 524.976562 464.910156 519.539062 463.09375 C 508.199219 459.371094 498.695312 453.078125 491.332031 444.398438 C 485.820312 437.917969 481.777344 430.65625 479.316406 422.824219 C 477.351562 416.90625 476.359375 410.53125 476.359375 403.863281 L 476.359375 386.507812 C 476.359375 379.660156 477.4375 372.996094 479.566406 366.695312 C 481.679688 360.425781 484.703125 354.628906 488.554688 349.472656 C 492.375 344.347656 496.992188 339.808594 502.277344 335.988281 C 507.597656 332.140625 513.445312 329.199219 519.664062 327.234375 L 519.933594 327.15625 C 522.714844 326.382812 525.613281 325.71875 528.546875 325.175781 C 531.734375 324.589844 535.03125 324.292969 538.359375 324.292969 C 546.851562 324.292969 554.988281 325.957031 562.546875 329.242188 C 570.023438 332.496094 576.65625 336.988281 582.265625 342.601562 C 587.875 348.210938 592.371094 354.84375 595.621094 362.3125 C 598.90625 369.875 600.574219 378.011719 600.574219 386.507812 L 600.574219 394.507812 L 546.859375 394.507812 L 546.859375 386.507812 C 546.859375 384.054688 546.09375 382.199219 544.378906 380.484375 C 542.664062 378.769531 540.808594 378.007812 538.359375 378.007812 C 535.941406 378.007812 534.140625 378.75 532.507812 380.417969 C 530.824219 382.140625 530.074219 384.019531 530.074219 386.507812 L 530.074219 403.863281 C 530.074219 406.132812 530.765625 407.886719 532.316406 409.550781 C 533.832031 411.179688 535.5 412.078125 537.546875 412.363281 L 541.804688 412.375 C 550.605469 412.867188 558.863281 415.070312 566.347656 418.933594 C 573.726562 422.746094 580.183594 427.804688 585.539062 433.976562 L 585.609375 434.054688 C 590.96875 440.386719 595.003906 447.636719 597.605469 455.59375 L 597.710938 455.941406 C 598.480469 458.710938 599.144531 461.609375 599.6875 464.550781 C 600.277344 467.746094 600.574219 471.042969 600.574219 474.363281 L 600.574219 491.722656 C 600.574219 500.21875 598.90625 508.359375 595.625 515.910156 C 592.375 523.378906 587.878906 530.011719 582.265625 535.628906 C 576.644531 541.246094 570.011719 545.742188 562.546875 548.988281 C 555 552.269531 546.859375 553.933594 538.359375 553.933594 "/>
@@ -3197,31 +3155,15 @@ function route() {
   else if (h.indexOf('canale-') === 0) { app.view = 'channel'; app.param = h.slice(7); }
   else { app.view = { task: 'tasks', catalogo: 'catalog', uscite: 'releases', canali: 'channels', finanze: 'finance', cronologia: 'log', idee: 'ideas', dashboard: 'dash' }[h] || 'home'; app.param = ''; }
 }
-/* il contenuto scorre dentro #app (pannello tra le barre), non nella finestra */
-function mainEl() { return document.getElementById('app'); }
-function mainScrollY() { var m = mainEl(); return m ? m.scrollTop : 0; }
-function scrollMain(y) { var m = mainEl(); if (m) m.scrollTop = y; }
-function scrollMainBy(d) { var m = mainEl(); if (m) m.scrollTop += d; }
-/* vetro liquido (WebGL) sull'intera app: la scena sostituisce il contenitore #scene prima del primo render */
-function glassWanted() { return lsGet('hq-glass', '1') === '1' && resolvedTheme() !== 'chiaro'; }
-function bootGlassScene() {
-  var sc = document.getElementById('scene'); if (!sc) return;
-  var want = glassWanted(), isLG = sc.tagName.toLowerCase() === 'liquid-glass';
-  if (want === isLG) { if (isLG) sc.setAttribute('dim', resolvedTheme() === 'notte' ? '.86' : '.74'); return; }
-  var el = document.createElement(want ? 'liquid-glass' : 'div');
-  if (want) { el.setAttribute('backdrop', 'aurora'); el.setAttribute('colors', '#1A8CFF #0A2A4F #3AA0FF #04162E'); el.setAttribute('dim', resolvedTheme() === 'notte' ? '.86' : '.74'); if (reduceMotion) el.setAttribute('reduce-motion', ''); }
-  el.id = 'scene'; el.className = 'scene';
-  while (sc.firstChild) el.appendChild(sc.firstChild);
-  sc.parentNode.replaceChild(el, sc);
-  document.documentElement.classList.toggle('lg-on', want);
-  ['.top', '.bnav', '.side', '.gs-btn'].forEach(function (q) { document.querySelectorAll(q).forEach(function (n) { if (want) n.setAttribute('glass', ''); else n.removeAttribute('glass'); }); });
-}
+function mainScrollY() { return window.scrollY; }
+function scrollMain(y) { window.scrollTo(0, y); }
+function scrollMainBy(d) { window.scrollBy(0, d); }
 var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 if (lsGet('hq-motion', 'full') === 'lite') { reduceMotion = true; document.documentElement.classList.add('motion-lite'); }
 /* tema: 'auto' segue il sistema (chiaro di giorno se il sistema è chiaro, altrimenti scuro) */
 var THEMES = [['scuro', 'Scuro'], ['chiaro', 'Chiaro'], ['notte', 'Notte'], ['auto', 'Sistema']];
 function resolvedTheme() { var t = app.theme; if (t === 'oro') t = 'notte'; if (t === 'auto') t = (window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches) ? 'chiaro' : 'scuro'; return t; }
-function applyTheme() { document.body.setAttribute('data-theme', resolvedTheme()); if (typeof bootGlassScene === 'function') bootGlassScene(); var m = document.querySelector('meta[name=theme-color]'); if (m) m.setAttribute('content', resolvedTheme() === 'chiaro' ? '#F3F6FA' : '#000000'); }
+function applyTheme() { document.body.setAttribute('data-theme', resolvedTheme()); var m = document.querySelector('meta[name=theme-color]'); if (m) m.setAttribute('content', resolvedTheme() === 'chiaro' ? '#F3F6FA' : '#000000'); }
 if (window.matchMedia) { try { matchMedia('(prefers-color-scheme: light)').addEventListener('change', function () { if (app.theme === 'auto') applyTheme(); }); } catch (e) {} }
 function navSync(hash) {
   app.skipHash = ('#' + hash) !== location.hash;
@@ -4284,7 +4226,6 @@ function openSettings() {
     body: '<p class="set-h">Aspetto</p>' +
       settingsRow('Tema', 'Sistema segue il tema del telefono o del computer', optGroup('theme-x', THEMES, app.theme === 'oro' ? 'notte' : app.theme, function (o) { return '<i class="th-dot th-' + o[0] + '"></i>'; }, 'themes') + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">' + stChip('yes') + stChip('no') + stChip('unknown') + '</div>') +
       settingsRow('Animazioni', 'Ridotte: niente transizioni di pagina e meno movimento', optGroup('motion-x', [['full', 'Complete'], ['lite', 'Ridotte']], lsGet('hq-motion', 'full'))) +
-      settingsRow('Vetro liquido', 'Barre e pulsanti come lastre di vetro vere (WebGL). Spegnilo se il dispositivo scalda o la batteria dura poco. Non attivo col tema Chiaro.', optGroup('glass-x', [['1', 'Attivo'], ['0', 'Spento']], lsGet('hq-glass', '1'))) +
       '<p class="set-h">Feedback</p>' +
       settingsRow('Suoni', '', optGroup('sound-x', [['1', 'Attivi'], ['0', 'Spenti']], lsGet('hq-sound', '1'))) +
       settingsRow('Vibrazione', 'Solo sul telefono, quando completi o sposti qualcosa', optGroup('haptic-x', [['1', 'Attiva'], ['0', 'Spenta']], lsGet('hq-haptic', '1'))) +
@@ -4300,7 +4241,6 @@ function openSettings() {
       '<div class="actions"><button type="button" class="btn" style="flex:1" data-sact="close">Chiudi</button></div>',
     onOpt: function (grp, val) {
       if (grp === 'theme-x') { app.theme = val; lsSet('hq-theme', val); applyTheme(); Sfx.play('toggle'); }
-      if (grp === 'glass-x') { lsSet('hq-glass', val); bootGlassScene(); Sfx.play('toggle'); }
       if (grp === 'motion-x') { lsSet('hq-motion', val); reduceMotion = val === 'lite' || !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); document.documentElement.classList.toggle('motion-lite', val === 'lite'); }
       if (grp === 'sound-x') { lsSet('hq-sound', val); if (val === '1') Sfx.play('check'); }
       if (grp === 'haptic-x') { lsSet('hq-haptic', val); if (val === '1') haptic(12); }
@@ -6004,7 +5944,6 @@ document.addEventListener('keydown', function (e) {
 (function () {
   var who = document.getElementById('who'); if (!who) return;
   who.insertAdjacentHTML('beforebegin', '<button class="gs-btn" data-act="search" aria-label="Cerca" title="Cerca (⌘K)">' + I.search + '<span>Cerca</span><kbd>⌘K</kbd></button>');
-  if (document.documentElement.classList.contains('lg-on')) who.previousElementSibling.setAttribute('glass', '');
 })();
 
 /* ---------- AZIONI RAPIDE ---------- */
@@ -6303,8 +6242,7 @@ function buildSide() {
     '<div class="side-foot"><button data-act="phase-editor" title="Fasi dei prodotti">' + I.stDoing + '<span>Fasi</span></button><button data-act="settings" title="Impostazioni">' + I.gear + '<span>Impostazioni</span></button>' +
     '<button class="side-tog" data-act="side-toggle" title="' + (col ? 'Allarga' : 'Restringi') + '" aria-label="Allarga o restringi la barra">' + I.chev + '</button>' +
     '<button class="side-me" data-act="me-menu" aria-label="Profilo"></button></div></aside>';
-  var host = document.getElementById('scene') || document.body; host.insertAdjacentHTML('afterbegin', html);
-  if (document.documentElement.classList.contains('lg-on')) document.getElementById('side').setAttribute('glass', '');
+  document.body.insertAdjacentHTML('afterbegin', html);
   document.documentElement.classList.toggle('side-col', col);
 }
 /* Icone delle sottosezioni (stesso tratto delle icone principali) */
@@ -6434,11 +6372,6 @@ buildSide();
   window.addEventListener('resize', function () { updateSide(); });
 })();
 
-/* rifrazione SVG dietro le barre: solo Chromium su desktop (Safari e Firefox ignorerebbero tutto il backdrop-filter) */
-(function () {
-  var ua = navigator.userAgent, chromium = !!window.chrome && /Chrome\//.test(ua) && !/Edg\/|OPR\//.test(ua) || /Edg\//.test(ua);
-  if (chromium && window.innerWidth >= 900 && !reduceMotion && lsGet('hq-motion', 'full') !== 'lite') document.documentElement.classList.add('lg-refract');
-})();
 
 /* ================= TASK DA TELEFONO: corsie a scorrimento + sposta con pressione lunga ================= */
 function laneScroll(l, smooth) {
