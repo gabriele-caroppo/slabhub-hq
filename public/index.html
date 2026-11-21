@@ -1669,9 +1669,10 @@ html.motion-lite .skel,html.motion-lite .aur,html.motion-lite .g-halo{animation:
    costo quasi nullo, il vetro CSS delle barre le sfoca sotto, il contenuto ci passa sopra. */
 .aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;contain:strict}
 .aurora .au{position:absolute;border-radius:50%;will-change:transform;opacity:.9;mix-blend-mode:screen}
-.aurora .a{width:70vmax;height:70vmax;left:-20vmax;top:-26vmax;background:radial-gradient(circle at 50% 50%,rgba(26,140,255,.34),rgba(26,140,255,.1) 42%,rgba(26,140,255,0) 68%);animation:auA 38s ease-in-out infinite alternate}
-.aurora .b{width:64vmax;height:64vmax;right:-24vmax;top:10vmax;background:radial-gradient(circle at 50% 50%,rgba(58,160,255,.22),rgba(21,87,168,.09) 45%,rgba(21,87,168,0) 70%);animation:auB 46s ease-in-out infinite alternate}
-.aurora .c{width:60vmax;height:60vmax;left:16vmax;bottom:-32vmax;background:radial-gradient(circle at 50% 50%,rgba(11,116,224,.2),rgba(6,32,64,.08) 45%,rgba(6,32,64,0) 70%);animation:auC 54s ease-in-out infinite alternate}
+.aurora .a{width:78vmax;height:78vmax;left:-22vmax;top:-30vmax;background:radial-gradient(circle at 50% 50%,rgba(40,150,255,.62),rgba(26,140,255,.22) 40%,rgba(26,140,255,0) 68%);animation:auA 38s ease-in-out infinite alternate}
+.aurora .b{width:70vmax;height:70vmax;right:-26vmax;top:6vmax;background:radial-gradient(circle at 50% 50%,rgba(80,175,255,.42),rgba(21,87,168,.16) 45%,rgba(21,87,168,0) 70%);animation:auB 46s ease-in-out infinite alternate}
+.aurora .c{width:66vmax;height:66vmax;left:12vmax;bottom:-34vmax;background:radial-gradient(circle at 50% 50%,rgba(11,116,224,.4),rgba(10,60,120,.14) 45%,rgba(10,60,120,0) 70%);animation:auC 54s ease-in-out infinite alternate}
+.aurora .d{width:50vmax;height:50vmax;right:8vmax;bottom:-18vmax;background:radial-gradient(circle at 50% 50%,rgba(120,200,255,.26),rgba(60,150,255,.08) 45%,rgba(60,150,255,0) 70%);animation:auB 62s ease-in-out infinite alternate-reverse}
 @keyframes auA{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(14vmax,10vmax,0) scale(1.12)}}
 @keyframes auB{from{transform:translate3d(0,0,0) scale(1.05)}to{transform:translate3d(-16vmax,12vmax,0) scale(.92)}}
 @keyframes auC{from{transform:translate3d(0,0,0) scale(.95)}to{transform:translate3d(12vmax,-14vmax,0) scale(1.1)}}
@@ -1694,13 +1695,13 @@ main{position:relative;z-index:1}
 /* ===================== CROMATURA "LIQUID" IN CSS (21/11 sera) =====================
    Pillola in alto centrata, sidebar come pannello staccato, barra in basso a pillola:
    vetro CSS (blur + saturazione + bordo speculare) sopra l'aurora e sul contenuto che scorre sotto. */
-:root{--lgbg:color-mix(in srgb,var(--surface) 58%,transparent);--lgline:rgba(255,255,255,.14);--lghi:rgba(255,255,255,.22)}
+:root{--lgbg:linear-gradient(180deg,rgba(150,185,230,.09),rgba(120,160,215,.05)),rgba(22,36,58,.5);--lgline:rgba(255,255,255,.2);--lghi:rgba(255,255,255,.32)}
 [data-theme="chiaro"]{--lgbg:rgba(255,255,255,.62);--lgline:rgba(10,17,27,.1);--lghi:#fff}
-[data-theme="notte"]{--lgbg:rgba(0,0,0,.55);--lgline:rgba(255,255,255,.12);--lghi:rgba(255,255,255,.18)}
+[data-theme="notte"]{--lgbg:linear-gradient(180deg,rgba(150,185,230,.06),rgba(120,160,215,.03)),rgba(8,14,24,.6);--lgline:rgba(255,255,255,.16);--lghi:rgba(255,255,255,.24)}
 /* pillola in alto */
 .top{position:sticky!important;top:calc(10px + var(--safe-t));z-index:30;width:min(760px,calc(100% - 24px));margin:10px auto 0;padding:0 10px 0 14px!important;height:58px;border-radius:999px;box-sizing:border-box;gap:12px;
   background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.015) 55%,rgba(255,255,255,0)),var(--lgbg)!important;
-  -webkit-backdrop-filter:blur(28px) saturate(185%) brightness(1.04);backdrop-filter:blur(28px) saturate(185%) brightness(1.04);
+  -webkit-backdrop-filter:blur(30px) saturate(200%) brightness(1.12);backdrop-filter:blur(30px) saturate(200%) brightness(1.12);
   border:1px solid var(--lgline)!important;border-bottom:1px solid var(--lgline)!important;
   box-shadow:inset 0 1px 0 var(--lghi),inset 0 -1px 0 rgba(255,255,255,.04),0 14px 40px -18px rgba(0,0,0,.65),0 2px 6px rgba(0,0,0,.18)!important;
   transition:width .32s cubic-bezier(.2,.8,.2,1),transform .32s cubic-bezier(.2,.8,.2,1),background .25s}
@@ -1711,7 +1712,7 @@ main{padding-top:18px}
 /* pillola in basso (telefono): più vetro */
 @media (max-width:899px){
   .bnav{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.015) 55%,rgba(255,255,255,0)),var(--lgbg)!important;border:1px solid var(--lgline)!important;
-    -webkit-backdrop-filter:blur(28px) saturate(185%) brightness(1.04)!important;backdrop-filter:blur(28px) saturate(185%) brightness(1.04)!important;
+    -webkit-backdrop-filter:blur(30px) saturate(200%) brightness(1.12)!important;backdrop-filter:blur(30px) saturate(200%) brightness(1.12)!important;
     box-shadow:inset 0 1px 0 var(--lghi),0 18px 44px -18px rgba(0,0,0,.75),0 2px 6px rgba(0,0,0,.2)!important}
   .top{width:calc(100% - 24px)}
 }
@@ -1719,8 +1720,8 @@ main{padding-top:18px}
 @media (min-width:900px){
   .side{top:12px!important;left:12px!important;bottom:12px!important;border-radius:28px;border:1px solid var(--lgline)!important;
     background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.012) 30%,rgba(255,255,255,0)),var(--lgbg)!important;
-    -webkit-backdrop-filter:blur(28px) saturate(185%) brightness(1.04);backdrop-filter:blur(28px) saturate(185%) brightness(1.04);
-    box-shadow:inset 0 1px 0 var(--lghi),inset -1px 0 0 rgba(255,255,255,.03),0 24px 60px -30px rgba(0,0,0,.8)!important}
+    -webkit-backdrop-filter:blur(30px) saturate(200%) brightness(1.12);backdrop-filter:blur(30px) saturate(200%) brightness(1.12);
+    box-shadow:inset 0 1px 0 var(--lghi),inset -1px 0 0 rgba(255,255,255,.04),0 24px 60px -30px rgba(0,0,0,.8)!important}
   .side::after{border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.06),transparent 160px)}
   .side::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;padding:1px;background:linear-gradient(160deg,rgba(255,255,255,.3),rgba(255,255,255,.03) 35%,rgba(255,255,255,.02) 75%,rgba(255,255,255,.16));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.9}
   :root{--sidew:248px}
@@ -1737,7 +1738,7 @@ main{padding-top:18px}
 </style>
 </head>
 <body data-theme="scuro">
-<div class="aurora" aria-hidden="true"><i class="au a"></i><i class="au b"></i><i class="au c"></i></div>
+<div class="aurora" aria-hidden="true"><i class="au a"></i><i class="au b"></i><i class="au c"></i><i class="au d"></i></div>
 <header class="top">
   <button data-act="go" data-v="home" aria-label="Home" style="display:flex"><svg class="logo" viewBox="0 0 973.2 426.5" fill="currentColor" role="img" aria-label="SlabHub"><use href="#slabhub-logo" width="973.2" height="426.5"/></svg></button>
   <span class="grow"></span>
