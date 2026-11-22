@@ -1836,6 +1836,25 @@ html:not(.lg-on) main{padding-top:calc(12px + 58px + 18px + var(--safe-t))}
 @media (min-width:900px){html:not(.lg-on) .top{left:calc(var(--sidew) + (100% - var(--sidew)) / 2)}}
 
 @media (min-width:900px){.top>button[aria-label="Home"],.top .ham{display:none!important}}
+
+/* ===================== DASHBOARD v2 (22/11): gerarchia, numeri che stanno nei box ===================== */
+.kpis.four{grid-template-columns:repeat(4,1fr)}
+.kpis.three{grid-template-columns:repeat(3,1fr)}
+.kpis.fin4{grid-template-columns:repeat(4,1fr)}
+.kpi b{font-size:clamp(17px,1.5vw,24px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.kpi.neg b{color:var(--no)}.kpi.pos b{color:var(--ok)}
+.kpi span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dash-two{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;align-items:end}
+.chart-t{margin:4px 0 2px;font:700 11px/1 var(--sp);letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.chart text.val.neg{fill:var(--no)}
+.list.tight .item{padding-top:9px;padding-bottom:9px}
+@media (max-width:899px){
+  .kpis.four,.kpis.fin4{grid-template-columns:1fr 1fr}
+  .kpis.three{grid-template-columns:1fr 1fr 1fr}
+  .kpi b{font-size:clamp(16px,5vw,20px)}
+  .dash-two{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body data-theme="scuro">
@@ -2879,7 +2898,7 @@ var ENERGY = { fire: 'Fuoco', water: 'Acqua', grass: 'Erba', lightning: 'Lampo',
 var REL_TYPES = [['drop', 'Drop'], ['linea', 'Lancio linea'], ['stagionale', 'Stagionale'], ['evento', 'Evento'], ['creator', 'Campagna creator'], ['restock', 'Restock'], ['collab', 'Collab']];
 var REL_STATUS = [['idea', 'Idea'], ['indicativa', 'Indicativa'], ['confermata', 'Confermata'], ['in_corso', 'In corso'], ['completata', 'Completata']];
 var EVENT_CHECK = [['materiali', 'Materiali (magliette, volantini)'], ['quiz', 'Quiz e codice sconto'], ['landing', 'Landing iscrizione Klaviyo'], ['giveaway', 'Giveaway'], ['stand', 'Stand e logistica']];
-var FIN_CATEGORIES = ['Materiali', 'Packaging', 'Spedizioni', 'Pubblicità', 'Creator', 'Abbonamenti', 'Eventi', 'Attrezzatura', 'Vendite Shopify', 'Vendite in fiera', 'Altro'];
+var FIN_CATEGORIES = ['Vendita', 'Abbonamento Shopify', 'Stampe', 'Materiali', 'Imballaggio', 'Spedizione ordine', 'Spedizione collab', 'Pubblicità', 'Eventi', 'Strumenti', 'Dominio ed email', 'Investimento iniziale', 'Prelievo da cassa', 'Altro'];
 var MESI = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
 var MESI_L = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'];
 var GIORNI = ['domenica', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato'];
@@ -3091,7 +3110,7 @@ function startDemo() {
   try { saved = JSON.parse(lsGet('hq-demo-v4', 'null')); } catch (e) {}
   if (!saved || !saved.meta || !saved.meta.seeded) { saved = buildSeed(); }
   app.data = saved; app.live = false; localSave(); migratePhases(saved);
-  route(); render(true); maybeAskActor();
+  route(); render(true); maybeAskActor(); if (typeof runImports === 'function') runImports();
 }
 function startFirebase() {
   var useAuth = Object.keys(AUTH_HASHES).length > 0 && !!(window.crypto && crypto.subtle);
@@ -3117,7 +3136,7 @@ function startFirebase() {
         if (!v || !v.meta || !v.meta.seeded) { fd.set(r(''), buildSeed()); return; }
         app.data = v; app.live = true;
         migratePhases(v);
-        if (first) { first = false; route(); render(true); if (!useAuth) maybeAskActor(); else gateDone(); return; }
+        if (first) { first = false; route(); render(true); if (!useAuth) maybeAskActor(); else gateDone(); if (typeof runImports === 'function') setTimeout(runImports, 800); return; }
         softRender();
       }, function (err) { toast('Accesso negato al database: ' + err.code); });
     }
@@ -3295,6 +3314,7 @@ var I = {
   ch: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.6" cy="7.4" r=".8" fill="currentColor"/></svg>',
   euro: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 6.5A6.5 6.5 0 1 0 17 17.5M4.5 10.5h9M4.5 13.5h9"/></svg>',
   hist: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4M12 8v4l3 2"/></svg>',
+  box: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8 12 4l8.5 4v8L12 20l-8.5-4z"/><path d="M3.5 8 12 12l8.5-4M12 12v8"/></svg>',
   gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3 1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8 1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
   edit: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 2.5l2 2L6 12l-3 1 1-3zM10 4l2 2"/></svg>',
   ext: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H3.5v9.5H13V9M9 3h4v4M13 3 7.5 8.5"/></svg>',
@@ -3330,7 +3350,7 @@ function route() {
   else if (h.indexOf('profilo-') === 0) { app.view = 'profile'; app.param = h.slice(8); }
   else if (h.indexOf('uscita-') === 0) { app.view = 'release'; app.param = h.slice(7); }
   else if (h.indexOf('canale-') === 0) { app.view = 'channel'; app.param = h.slice(7); }
-  else { app.view = { task: 'tasks', catalogo: 'catalog', uscite: 'releases', canali: 'channels', finanze: 'finance', cronologia: 'log', idee: 'ideas', dashboard: 'dash' }[h] || 'home'; app.param = ''; }
+  else { app.view = { task: 'tasks', catalogo: 'catalog', uscite: 'releases', canali: 'channels', finanze: 'finance', cronologia: 'log', idee: 'ideas', dashboard: 'dash', magazzino: 'stock' }[h] || 'home'; app.param = ''; }
 }
 /* con il vetro acceso il contenuto scorre dentro #app (pannello tra le barre), altrimenti nella finestra */
 function mainEl() { return document.documentElement.classList.contains('lg-on') ? document.getElementById('app') : null; }
@@ -3406,6 +3426,7 @@ function render(first) {
     else if (app.view === 'log') html = viewLog();
     else if (app.view === 'ideas') html = viewIdeas();
     else if (app.view === 'dash') html = viewDash();
+    else if (app.view === 'stock') html = viewStock();
   } catch (err) { html = '<div class="empty-note">Errore di visualizzazione: ' + esc(err.message) + '</div>'; console.error(err); }
   var main = document.getElementById('app');
   main.innerHTML = html;
@@ -3424,7 +3445,7 @@ function whoHtml() {
   var pr = person(app.actor);
   return '<button class="me-btn" data-act="me-menu" aria-label="Profilo di ' + esc(pr.name) + '"><span class="full">' + esc(pr.name) + '</span>' + avatar(app.actor, 34) + '</button>';
 }
-function navCur() { return app.view === 'card' || app.view === 'bundle' ? 'catalog' : app.view === 'channel' ? 'channels' : (app.view === 'releases' || app.view === 'release' || app.view === 'finance' || app.view === 'log' || app.view === 'ideas' || app.view === 'dash') ? 'more' : app.view; }
+function navCur() { return app.view === 'card' || app.view === 'bundle' ? 'catalog' : app.view === 'channel' ? 'channels' : (app.view === 'releases' || app.view === 'release' || app.view === 'finance' || app.view === 'log' || app.view === 'ideas' || app.view === 'dash' || app.view === 'stock') ? 'more' : app.view; }
 var NAV_ITEMS = [['home', 'home', 'Home'], ['tasks', 'task', 'Task'], ['catalog', 'catalogo', 'Catalogo'], ['channels', 'canali', 'Canali'], ['more', '', 'Altro']];
 function updateNav() {
   var nav = document.getElementById('bnav'); if (!nav) return;
@@ -3919,12 +3940,12 @@ function viewChannel(id) {
 /* ================= FINANZE ================= */
 function viewFinance() {
   var f = app.f;
-  var seg = '<div class="seg">' + [['mese', 'Bilancio'], ['movimenti', 'Movimenti'], ['debiti', 'Debiti']].map(function (x) { return '<button class="' + (f.tab === x[0] ? 'on' : '') + '" data-act="f-tab" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
+  var seg = '<div class="seg">' + [['mese', 'Bilancio'], ['movimenti', 'Movimenti'], ['soci', 'Soci']].map(function (x) { return '<button class="' + (f.tab === x[0] ? 'on' : '') + '" data-act="f-tab" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
   var nav = '<div class="toolbar nw" style="margin-top:14px"><button class="pill ghosty" data-act="f-prev" aria-label="Mese precedente">‹</button><span class="lab" style="flex:1;text-align:center">' + ymLabel(f.month) + '</span><button class="pill ghosty" data-act="f-next" aria-label="Mese successivo">›</button></div>';
-  var html = intro('Soci al 50/50', 'Finanze', '', '', plusBtn('new-entry', '', 'Nuovo movimento')) + block({ title: 'Riepilogo', body: financeSummary(), cls: 'first' }) + '<div style="height:14px"></div>' + seg + (f.tab !== 'debiti' ? nav : '<div style="height:14px"></div>');
+  var html = intro('Soci al 50/50', 'Finanze', '', '', plusBtn('new-entry', '', 'Nuovo movimento')) + block({ title: 'Da quando è nata SlabHub', body: financeOverview(), cls: 'first' }) + '<div style="height:14px"></div>' + seg + (f.tab !== 'soci' ? nav : '<div style="height:14px"></div>');
   if (f.tab === 'mese') html += block({ title: 'Bilancio · ' + ymLabel(f.month), body: financeMonth(f.month) });
   else if (f.tab === 'movimenti') html += block({ title: 'Movimenti · ' + ymLabel(f.month), add: ['new-entry', '', 'Nuovo movimento'], body: financeEntries(f.month) });
-  else html += block({ title: 'Debiti', body: financeDebts() });
+  else html += block({ title: 'Soci', body: financeSoci() });
   return html;
 }
 function verdictOf(g) { return Math.abs(g) < 0.005 ? 'Pari: nessuno deve niente all’altro.' : (g > 0 ? 'Valerio deve ' + eur(g) + ' a Gabriele.' : 'Gabriele deve ' + eur(-g) + ' a Valerio.'); }
@@ -3938,7 +3959,7 @@ function financeMonth(mk) {
     '<div class="sr2"><span>Quota degli incassi</span><span>' + eur(c.shareInc.gabriele) + '</span><span>' + eur(c.shareInc.valerio) + '</span></div>' +
     '<div class="sr2"><span>Rimborsi dati</span><span>' + eur(c.refund.gabriele) + '</span><span>' + eur(c.refund.valerio) + '</span></div>' +
     '<div class="sr2 tot"><span>Posizione del mese</span><span>' + eur(c.bal.gabriele) + '</span><span>' + eur(c.bal.valerio) + '</span></div></div>';
-  html += '<div class="panel"><strong>' + esc(verdictOf(c.bal.gabriele)) + '</strong><p class="note">' + (c.paid.comune || c.recv.comune ? 'Conto comune: ' + eur(c.paid.comune) + ' spesi, ' + eur(c.recv.comune) + ' incassati. ' : '') + 'Positivo = l’altro socio gli deve dei soldi. Il totale da saldare è in “Debiti”.</p><div class="actions"><button class="btn sm" data-act="f-tab" data-v="debiti">Vai ai debiti</button></div></div>';
+  html += '<div class="panel"><strong>' + esc(verdictOf(c.bal.gabriele)) + '</strong><p class="note">' + (c.paid.comune || c.recv.comune ? 'Conto comune: ' + eur(c.paid.comune) + ' spesi, ' + eur(c.recv.comune) + ' incassati. ' : '') + 'Positivo = l’altro socio gli deve dei soldi. Il quadro completo tra soci è in “Soci”.</p><div class="actions"><button class="btn sm" data-act="f-tab" data-v="debiti">Vai ai debiti</button></div></div>';
   return html;
 }
 function financeEntries(mk) {
@@ -3946,8 +3967,8 @@ function financeEntries(mk) {
   if (!es.length) return '<div class="empty-note">Nessun movimento in ' + ymLabel(mk).toLowerCase() + '.</div>';
   return '<div class="list">' + es.map(function (e) {
     var sg = e.split && e.split.gabriele != null ? e.split.gabriele : 50;
-    var who = e.paidBy === 'comune' ? 'Comune' : PEOPLE[e.paidBy] || '';
-    var effect = e.kind === 'rimborso' ? who + ' → ' + (e.paidBy === 'gabriele' ? 'Valerio' : 'Gabriele') : (e.kind === 'spesa' ? 'pagata da ' : 'ricevuto da ') + who + ' · ' + sg + '/' + (100 - sg);
+    var who = e.paidBy === 'comune' ? 'Cassa' : e.paidBy === 'soci' ? 'Soci 50/50' : PEOPLE[e.paidBy] || '';
+    var effect = e.kind === 'rimborso' ? who + ' → ' + (e.paidBy === 'gabriele' ? 'Valerio' : 'Gabriele') : e.kind === 'prelievo' ? 'preso dalla cassa da ' + who : (e.kind === 'spesa' ? 'pagata da ' : 'ricevuto da ') + who + (e.paidBy === 'soci' || e.paidBy === 'comune' ? '' : ' · ' + sg + '/' + (100 - sg));
     return '<button class="item" data-act="edit-entry" data-v="' + esc(e.id) + '"><div class="dt"><b>' + new Date(e.date + 'T12:00:00').getDate() + '</b><span>' + MESI[new Date(e.date + 'T12:00:00').getMonth()] + '</span></div><div class="tx"><strong>' + esc(e.kind === 'rimborso' ? 'Rimborso' : (e.category || e.kind)) + (e.notes ? ' · ' + esc(e.notes) : '') + '</strong><small>' + esc(effect) + (e.status === 'annullata' ? ' · annullata' : '') + '</small></div><span class="amount' + (e.kind === 'incasso' ? ' in' : '') + '">' + (e.kind === 'spesa' ? '−' : '') + eur(e.amount).replace('€ ', '€') + '</span></button>';
   }).join('') + '</div>';
 }
@@ -3962,6 +3983,59 @@ function financeDebts() {
   return html;
 }
 
+/* Totali dalla nascita di SlabHub, con la logica del foglio di Valerio (22/11/2026) */
+function financeTotals() {
+  var es = vals('finance/entries').filter(function (e) { return e.status !== 'annullata'; });
+  var t = { invest: 0, exp: 0, inc: 0, orders: 0, pocket: { gabriele: 0, valerio: 0 }, cashOut: 0, withdraw: { gabriele: 0, valerio: 0 }, byCat: {}, byMonth: {} };
+  es.forEach(function (e) {
+    var a = +e.amount || 0, p = e.paidBy || 'comune', k = e.date ? ym(e.date) : '';
+    if (!t.byMonth[k]) t.byMonth[k] = { exp: 0, inc: 0 };
+    if (e.kind === 'spesa') {
+      if (e.category === 'Investimento iniziale' || p === 'soci') { t.invest += a; t.pocket.gabriele += a / 2; t.pocket.valerio += a / 2; }
+      else { t.exp += a; t.byMonth[k].exp += a; t.byCat[e.category || 'Altro'] = (t.byCat[e.category || 'Altro'] || 0) + a; if (p === 'gabriele' || p === 'valerio') t.pocket[p] += a; else t.cashOut += a; }
+    } else if (e.kind === 'incasso') { t.inc += a; t.byMonth[k].inc += a; if ((e.category || 'Vendita') === 'Vendita') t.orders++; }
+    else if (e.kind === 'prelievo' && (p === 'gabriele' || p === 'valerio')) t.withdraw[p] += a;
+  });
+  t.spent = t.invest + t.exp; t.operating = t.inc - t.exp; t.result = t.inc - t.spent;
+  t.aov = t.orders ? t.inc / t.orders : 0;
+  t.cash = t.inc - t.cashOut - t.withdraw.gabriele - t.withdraw.valerio;
+  t.personal = t.result / 2;
+  t.settle = { gabriele: t.pocket.gabriele - t.withdraw.gabriele + t.personal, valerio: t.pocket.valerio - t.withdraw.valerio + t.personal };
+  return t;
+}
+function unitCost() {
+  var rows = vals('inventory/cost'), tot = 0, missing = [];
+  rows.forEach(function (c) { if (c.lot && c.pieces) tot += (+c.lot / +c.pieces) * (+c.per || 1); else missing.push(c.name); });
+  return { total: tot, missing: missing, rows: rows };
+}
+function financeOverview() {
+  var t = financeTotals(), uc = unitCost();
+  return '<div class="kpis fin4">' +
+    kpi(eur(t.result), 'Risultato complessivo', '<small class="faint">entrate − tutto lo speso</small>', t.result < 0 ? 'neg' : 'pos') +
+    kpi(eur(t.cash), 'Cassa SlabHub', '<small class="faint">soldi degli ordini non spesi</small>') +
+    kpi(eur(t.inc), 'Entrate', '<small class="faint">' + t.orders + ' ordini · media ' + eur(t.aov) + '</small>') +
+    kpi(eur(t.spent), 'Speso in totale', '<small class="faint">' + eur(t.invest) + ' investimento + ' + eur(t.exp) + ' uscite</small>') + '</div>' +
+    '<p class="note">' + (t.result < 0 ? 'Da recuperare prima di dividere utili: <strong>' + eur(-t.result) + '</strong>. ' : 'Utile da dividere: <strong>' + eur(t.result) + '</strong>. ') + 'Un quadretto completo costa <strong>' + eur(uc.total) + '</strong> di materiali' + (uc.missing.length ? ' (manca il costo di: ' + esc(uc.missing.join(', ')) + ')' : '') + '.</p>';
+}
+function financeSoci() {
+  var t = financeTotals();
+  function row(l, g, v, cls) { return '<div class="sr2' + (cls ? ' ' + cls : '') + '"><span>' + l + '</span><span>' + g + '</span><span>' + v + '</span></div>'; }
+  var html = '<div class="split"><div class="sr2 h"><span></span><span>Gabriele</span><span>Valerio</span></div>' +
+    row('Investimento iniziale (50/50)', eur(t.invest / 2), eur(t.invest / 2)) +
+    row('Uscite pagate di tasca', eur(t.pocket.gabriele - t.invest / 2), eur(t.pocket.valerio - t.invest / 2)) +
+    row('Totale messo di tasca', eur(t.pocket.gabriele), eur(t.pocket.valerio), 'tot') +
+    row('Prelievi dalla cassa', eur(t.withdraw.gabriele), eur(t.withdraw.valerio)) +
+    row('Quota del risultato', eur(t.personal), eur(t.personal)) +
+    row('Conguaglio', eur(t.settle.gabriele), eur(t.settle.valerio), 'tot') + '</div>';
+  var sg = t.settle.gabriele, sv = t.settle.valerio;
+  html += '<div class="panel"><strong>' + (Math.abs(sg) < .005 && Math.abs(sv) < .005 ? 'Pari.' : (sg > 0 ? 'SlabHub deve ' + eur(sg) + ' a Gabriele' : 'Gabriele deve rimettere ' + eur(-sg)) + ' · ' + (sv > 0 ? 'SlabHub deve ' + eur(sv) + ' a Valerio' : 'Valerio deve rimettere ' + eur(-sv))) + '</strong>' +
+    '<p class="note">Positivo: la cassa restituisce quella cifra al socio. Negativo: il socio la rimette. I conguagli sommati fanno la cassa (' + eur(t.cash) + ')' + (Math.abs(sg + sv - t.cash) < .05 ? ' ✓' : ' — non tornano: controlla i movimenti') + '.</p>' +
+    '<div class="actions"><button class="btn" data-act="new-entry" data-k="prelievo">' + I.swap + 'Segna un prelievo</button></div></div>';
+  html += '<div class="group-h">Uscite per categoria<span>dal libro giornale</span></div><div class="list">' + Object.keys(t.byCat).sort(function (a, b) { return t.byCat[b] - t.byCat[a]; }).map(function (k) {
+    return '<div class="item flat"><div class="tx"><strong>' + esc(k) + '</strong><small>' + Math.round(t.byCat[k] / (t.exp || 1) * 100) + '% delle uscite</small></div><span class="amount">' + eur(t.byCat[k]) + '</span></div>';
+  }).join('') + '</div>';
+  return html;
+}
 /* ================= FINANZE ================= */
 function monthEntries(mk) { return vals('finance/entries').filter(function (e) { return ym(e.date) === mk && e.status !== 'annullata'; }); }
 function monthCalc(mk) {
@@ -3969,7 +4043,9 @@ function monthCalc(mk) {
   var c = { inc: 0, exp: 0, paid: { gabriele: 0, valerio: 0, comune: 0 }, recv: { gabriele: 0, valerio: 0, comune: 0 }, shareExp: { gabriele: 0, valerio: 0 }, shareInc: { gabriele: 0, valerio: 0 }, refund: { gabriele: 0, valerio: 0 }, bal: { gabriele: 0, valerio: 0 } };
   es.forEach(function (e) {
     var a = +e.amount || 0, sg = e.split && e.split.gabriele != null ? +e.split.gabriele : 50, sv = 100 - sg, p = e.paidBy || 'comune';
-    if (e.kind === 'spesa') { c.exp += a; c.paid[p] = (c.paid[p] || 0) + a; c.shareExp.gabriele += a * sg / 100; c.shareExp.valerio += a * sv / 100; }
+    if (e.kind === 'spesa' && p === 'soci') { c.exp += a; c.paid.gabriele += a / 2; c.paid.valerio += a / 2; c.shareExp.gabriele += a / 2; c.shareExp.valerio += a / 2; }
+    else if (e.kind === 'spesa') { c.exp += a; c.paid[p] = (c.paid[p] || 0) + a; c.shareExp.gabriele += a * sg / 100; c.shareExp.valerio += a * sv / 100; }
+    else if (e.kind === 'prelievo' && (p === 'gabriele' || p === 'valerio')) { c.withdraw = c.withdraw || { gabriele: 0, valerio: 0 }; c.withdraw[p] += a; }
     else if (e.kind === 'incasso') { c.inc += a; c.recv[p] = (c.recv[p] || 0) + a; c.shareInc.gabriele += a * sg / 100; c.shareInc.valerio += a * sv / 100; }
     else if (e.kind === 'rimborso' && (p === 'gabriele' || p === 'valerio')) { c.refund[p] += a; }
   });
@@ -4312,15 +4388,15 @@ function openPost(chId, pid, preset) {
 }
 
 /* ---------- finanze ---------- */
-function openEntry(id) {
+function openEntry(id, presetKind) {
   var e = id ? obj('finance/entries/' + id) : null;
-  var v = e || { date: today(), kind: 'spesa', paidBy: app.actor, amount: '', category: '', ref: { type: 'general', id: '' }, split: { gabriele: 50, valerio: 50 }, status: 'aperta', notes: '' };
+  var v = e || { date: today(), kind: presetKind || 'spesa', paidBy: app.actor, amount: '', category: '', ref: { type: 'general', id: '' }, split: { gabriele: 50, valerio: 50 }, status: 'aperta', notes: '' };
   var refs = [['general:', 'Generale'], ['line:graded', 'Linea graded']].concat(vals('releases').map(function (r) { return ['release:' + r.id, r.title]; }));
   openSheet({
     title: e ? 'Modifica movimento' : 'Nuovo movimento', focus: e ? null : '[name=amount]',
-    body: '<div class="f"><span class="l">Tipo</span>' + optGroup('kind', [['spesa', 'Spesa'], ['incasso', 'Incasso'], ['rimborso', 'Rimborso']], v.kind) + '</div>' +
+    body: '<div class="f"><span class="l">Tipo</span>' + optGroup('kind', [['spesa', 'Spesa'], ['incasso', 'Incasso'], ['prelievo', 'Prelievo'], ['rimborso', 'Rimborso']], v.kind) + '</div>' +
       '<div class="row2"><div class="f"><label>Importo €</label><input name="amount" type="number" step="0.01" min="0" inputmode="decimal" required value="' + esc(v.amount) + '"></div><div class="f"><label>Data</label><input name="date" type="date" required value="' + esc(v.date) + '"></div></div>' +
-      '<div class="f"><span class="l" id="paidlab">' + (v.kind === 'incasso' ? 'Chi ha ricevuto' : v.kind === 'rimborso' ? 'Chi ha dato i soldi' : 'Chi ha pagato') + '</span>' + optGroup('paidBy', [['gabriele', 'Gabriele'], ['valerio', 'Valerio'], ['comune', 'Comune']], v.paidBy) + '</div>' +
+      '<div class="f"><span class="l" id="paidlab">' + (v.kind === 'incasso' ? 'Chi ha ricevuto' : v.kind === 'rimborso' ? 'Chi ha dato i soldi' : v.kind === 'prelievo' ? 'Chi ha preso dalla cassa' : 'Chi ha pagato') + '</span>' + optGroup('paidBy', [['gabriele', 'Gabriele'], ['valerio', 'Valerio'], ['comune', 'Cassa SlabHub'], ['soci', 'Soci 50/50']], v.paidBy) + '</div>' +
       '<div class="row2"><div class="f"><label>Categoria</label><select name="category"><option value="">—</option>' + opt(FIN_CATEGORIES.map(function (x) { return [x, x]; }), v.category) + '</select></div><div class="f"><label>Progetto</label><select name="ref">' + opt(refs, (v.ref && v.ref.type ? v.ref.type + ':' + (v.ref.id || '') : 'general:')) + '</select></div></div>' +
       '<div class="row2"><div class="f"><label>Quota Gabriele %</label><input name="splitG" type="number" min="0" max="100" value="' + esc(v.split ? v.split.gabriele : 50) + '"></div><div class="f"><label>Quota Valerio %</label><input name="splitV" type="number" readonly value="' + esc(100 - (v.split ? v.split.gabriele : 50)) + '"></div></div>' +
       '<div class="f"><label>Note</label><textarea name="notes" placeholder="Fornitore, ordine, cosa…">' + esc(v.notes || '') + '</textarea></div>' +
@@ -4401,7 +4477,7 @@ function openPhaseEditor(work) {
 /* ---------- altro / impostazioni ---------- */
 function openMore(anchor) {
   var ex = document.getElementById('pop'); if (ex) { closePop(); return; }
-  var items = [['dashboard', I.chart, 'Dashboard', 'Vendite, visite, contenuti, task'], ['uscite', I.rel, 'Uscite', 'Calendario dei lanci'], ['idee', I.bulb, 'Idee', 'La lavagna con i post-it'], ['finanze', I.euro, 'Finanze 50/50', 'Bilancio, movimenti, debiti'], ['#phases', I.task, 'Fasi dei prodotti', 'Nomi, sottofasi, collegamenti'], ['cronologia', I.hist, 'Cronologia', 'Modifiche e backup'], ['#settings', I.gear, 'Impostazioni', 'Tema, profilo, database']];
+  var items = [['dashboard', I.chart, 'Dashboard', 'Vendite, visite, contenuti, task'], ['uscite', I.rel, 'Uscite', 'Calendario dei lanci'], ['idee', I.bulb, 'Idee', 'La lavagna con i post-it'], ['finanze', I.euro, 'Finanze 50/50', 'Bilancio, movimenti, soci'], ['magazzino', I.box || I.cat, 'Magazzino', 'Componenti, stampe, omaggi'], ['#phases', I.task, 'Fasi dei prodotti', 'Nomi, sottofasi, collegamenti'], ['cronologia', I.hist, 'Cronologia', 'Modifiche e backup'], ['#settings', I.gear, 'Impostazioni', 'Tema, profilo, database']];
   var html = '<div class="pop-back" id="pop-back"></div><div class="pop" id="pop" role="menu">' + items.map(function (i) { return '<button role="menuitem" data-pop="' + i[0] + '">' + i[1] + '<span><strong>' + i[2] + '</strong><small>' + i[3] + '</small></span></button>'; }).join('') + '</div>';
   document.body.insertAdjacentHTML('beforeend', html);
   var pop = document.getElementById('pop'), r = anchor.getBoundingClientRect();
@@ -4794,7 +4870,7 @@ function channelsSummary() {
   }).join('') + '</div>';
 }
 function debtTotal() { var tot = 0, months = {}; vals('finance/entries').forEach(function (e) { if (e.date) months[ym(e.date)] = true; }); Object.keys(months).forEach(function (k) { tot += monthCalc(k).bal.gabriele; }); return tot; }
-function financeSummary() { var c = monthCalc(ym(today())); return '<div class="mstats">' + miniStat(Math.round(c.profit), 'Utile del mese €', 'f-go', 'data-v="mese"') + miniStat(Math.round(Math.abs(debtTotal())), 'Da saldare €', 'f-go', 'data-v="debiti"') + '</div><p class="fin-line">' + esc(verdictOf(debtTotal())) + '</p>'; }
+function financeSummary() { var t = financeTotals(), c = monthCalc(ym(today())); return '<div class="mstats">' + miniStat(Math.round(t.result), 'Risultato €', 'f-go', 'data-v="soci"', t.result < 0 ? 'attn' : false) + miniStat(Math.round(t.cash), 'Cassa €', 'f-go', 'data-v="soci"') + miniStat(Math.round(c.profit), 'Mese €', 'f-go', 'data-v="mese"', c.profit < 0) + '</div>'; }
 
 function viewHome() {
   var d = new Date();
@@ -5221,12 +5297,22 @@ document.addEventListener('click', function (e) {
     case 'plan-q': setPlanQuota(a.getAttribute('data-ch'), a.getAttribute('data-f'), +v); break;
     case 'dash-month': openDashMonth(v); break;
     case 'dash-range': app.dash.range = +v; render(); break;
+    case 'stock-tab': app.stock.tab = v; render(); break;
+    case 'stock-pf': app.stock.pf = v; render(); break;
+    case 'stock-go': app.stock.tab = v; if (app.view === 'stock') render(); else zoomGo(a, 'magazzino'); break;
+    case 'new-comp': openComp(null); break;
+    case 'edit-comp': openComp(v); break;
+    case 'new-print': openPrint(null); break;
+    case 'edit-print': openPrint(v); break;
+    case 'new-gift': openGift(null); break;
+    case 'edit-gift': openGift(v); break;
+    case 'edit-cost': openCost(v); break;
     case 'edit-post': openPost(v, a.getAttribute('data-p')); break;
     case 'f-tab': app.f.tab = v; render(); break;
     case 'f-month': app.f.month = v; app.f.tab = 'movimenti'; render(); break;
     case 'f-prev': app.f.month = ymShift(app.f.month, -1); render(); break;
     case 'f-next': app.f.month = ymShift(app.f.month, 1); render(); break;
-    case 'new-entry': openEntry(null); break;
+    case 'new-entry': openEntry(null, a.getAttribute('data-k') || ''); break;
     case 'edit-entry': openEntry(v); break;
     case 'settle': settleDebt(+v); break;
     case 'copy-json': var txt = JSON.stringify(backupData(), null, 2); if (navigator.clipboard) navigator.clipboard.writeText(txt).then(function () { toast('Backup copiato'); }, function () { toast('Copia non consentita qui'); }); else toast('Copia non disponibile'); break;
@@ -5835,16 +5921,22 @@ function deltaHtml(cur, prev, inverse) {
 }
 /* grafico a barre in SVG puro: items [{l, v, v2?}] */
 function svgBars(items, o) {
-  o = o || {}; var W = 100 * items.length, H = 120, max = Math.max.apply(null, items.map(function (x) { return Math.max(x.v || 0, x.v2 || 0); }).concat([1]));
+  o = o || {}; var W = 100 * items.length, H = 120;
+  var vals_ = items.map(function (x) { return Math.max(x.v || 0, x.v2 || 0); }), mins = items.map(function (x) { return Math.min(x.v || 0, x.v2 || 0); });
+  var max = Math.max.apply(null, vals_.concat([0])), min = Math.min.apply(null, mins.concat([0]));
+  var neg = min < 0, span = (max - min) || 1, top = 8, bottom = 96, zero = neg ? Math.round(bottom - (0 - min) / span * (bottom - top)) : bottom;
   var bw = 56, g = (100 - bw) / 2;
+  function yOf(v) { return Math.round(bottom - (v - min) / span * (bottom - top)); }
   var bars = items.map(function (x, i) {
-    var h = Math.round((x.v || 0) / max * 88), h2 = x.v2 != null ? Math.round((x.v2 || 0) / max * 88) : 0, x0 = i * 100 + g;
-    return '<g class="bar" style="--d:' + (i * 60) + 'ms">' + (x.v2 != null ? '<rect x="' + (x0 + bw / 2 + 2) + '" y="' + (96 - h2) + '" width="' + (bw / 2 - 2) + '" height="' + h2 + '" rx="4" fill="' + (o.color2 || 'var(--doing)') + '"/>' : '') +
-      '<rect x="' + x0 + '" y="' + (96 - h) + '" width="' + (x.v2 != null ? bw / 2 - 2 : bw) + '" height="' + Math.max(h, x.v ? 2 : 0) + '" rx="4" fill="' + (o.color || 'var(--accent)') + '"' + (x.cur ? ' class="cur"' : '') + '/>' +
-      (x.v ? '<text x="' + (x0 + (x.v2 != null ? bw / 4 - 1 : bw / 2)) + '" y="' + (90 - h) + '" text-anchor="middle" class="val">' + esc(o.fmt ? o.fmt(x.v) : numIt(x.v)) + '</text>' : '') +
+    var v = x.v || 0, y = yOf(v), h = Math.abs(zero - y), ry = Math.min(zero, y), x0 = i * 100 + g, isNeg = v < 0;
+    var h2 = 0, y2 = 0; if (x.v2 != null) { y2 = yOf(x.v2 || 0); h2 = Math.abs(zero - y2); }
+    return '<g class="bar" style="--d:' + (i * 60) + 'ms">' + (x.v2 != null ? '<rect x="' + (x0 + bw / 2 + 2) + '" y="' + Math.min(zero, y2) + '" width="' + (bw / 2 - 2) + '" height="' + h2 + '" rx="4" fill="' + (o.color2 || 'var(--doing)') + '"/>' : '') +
+      '<rect x="' + x0 + '" y="' + ry + '" width="' + (x.v2 != null ? bw / 2 - 2 : bw) + '" height="' + Math.max(h, v ? 2 : 0) + '" rx="4" fill="' + (isNeg ? 'var(--no)' : (o.color || 'var(--accent)')) + '"' + (x.cur ? ' class="cur"' : '') + '/>' +
+      (v ? '<text x="' + (x0 + (x.v2 != null ? bw / 4 - 1 : bw / 2)) + '" y="' + (isNeg ? zero - 6 : ry - 6) + '" text-anchor="middle" class="val' + (isNeg ? ' neg' : '') + '">' + esc(o.fmt ? o.fmt(v) : numIt(v)) + '</text>' : '') +
       '<text x="' + (i * 100 + 50) + '" y="114" text-anchor="middle" class="lab' + (x.cur ? ' cur' : '') + '">' + esc(x.l) + '</text></g>';
   }).join('');
-  return '<div class="chart-wrap"><svg class="chart" style="--n:' + items.length + '" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(o.aria || 'grafico') + '">' + bars + '</svg></div>';
+  var axis = neg ? '<line x1="0" x2="' + W + '" y1="' + zero + '" y2="' + zero + '" stroke="currentColor" opacity=".25" stroke-dasharray="3 4"/>' : '';
+  return '<div class="chart-wrap"><svg class="chart" style="--n:' + items.length + '" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(o.aria || 'grafico') + '">' + axis + bars + '</svg></div>';
 }
 /* linea con area: items [{l, v}] */
 function svgLine(items, o) {
@@ -5864,26 +5956,37 @@ function viewDash() {
   var hasData = d.some(function (x) { return x.sales || x.sessions || x.orders; });
   var conv = function (x) { return x.sessions ? x.orders / x.sessions * 100 : 0; }, aov = function (x) { return x.orders ? x.sales / x.orders : 0; };
   var seg = '<div class="seg">' + [3, 6, 12].map(function (r) { return '<button class="' + (n === r ? 'on' : '') + '" data-act="dash-range" data-v="' + r + '">' + r + ' mesi</button>'; }).join('') + '</div>';
-  var shopNote = '<p class="note">Dati Shopify (vendite, ordini, sessioni). Si aggiornano con “Aggiorna dati” o chiedendolo a Claude in chat' + (last ? ' · ultimo aggiornamento ' + niceDate(last.slice(0, 10)) : '') + '.</p>';
-  var html = intro('Come stiamo andando', 'Dashboard', '', '', plusBtn('dash-month', cur, 'Aggiorna dati')) +
-    '<div class="toolbar">' + seg + '</div>';
-  if (!hasData) html += '<div class="empty-note" style="margin-bottom:14px">Ancora nessun dato Shopify. Tocca “Aggiorna dati” e inserisci vendite, ordini e sessioni del mese, oppure chiedilo a Claude.</div>';
-  html += '<div class="blocks">' +
-    block({ title: 'Vendite', cls: 'wide', body: '<div class="kpis">' + kpi(eur(c.sales || 0), 'Questo mese', deltaHtml(+c.sales || 0, +pz.sales || 0)) + kpi(eur(aov(c)), 'Scontrino medio', '<small class="faint">vendite / ordini</small>') + kpi(numIt(d.reduce(function (a, x) { return a + x.sales; }, 0)) + ' €', 'Totale ' + n + ' mesi', '') + '</div>' + svgBars(d.map(function (x) { return { l: x.l, v: x.sales, cur: x.cur }; }), { fmt: function (v) { return numIt(v) + ' €'; }, aria: 'Vendite per mese' }) + shopNote }) +
-    block({ title: 'Visite al sito', body: '<div class="kpis two">' + kpi(numIt(c.sessions || 0), 'Sessioni questo mese', deltaHtml(+c.sessions || 0, +pz.sessions || 0)) + kpi(numIt(conv(c), 2) + '%', 'Conversione', '<small class="faint">ordini / sessioni</small>') + '</div>' + svgLine(d.map(function (x) { return { l: x.l, v: x.sessions, cur: x.cur }; }), { aria: 'Sessioni per mese' }) }) +
-    block({ title: 'Ordini', body: '<div class="kpis two">' + kpi(numIt(c.orders || 0), 'Questo mese', deltaHtml(+c.orders || 0, +pz.orders || 0)) + kpi(numIt(d.reduce(function (a, x) { return a + x.orders; }, 0)), 'Totale ' + n + ' mesi', '') + '</div>' + svgBars(d.map(function (x) { return { l: x.l, v: x.orders, cur: x.cur }; }), { color: 'var(--ok)', aria: 'Ordini per mese' }) }) +
-    block({ title: 'Contenuti pubblicati', go: 'canali', body: dashContent(months) }) +
-    block({ title: 'Task fatte', go: 'task', body: dashTasks() }) +
-    block({ title: 'Catalogo pronto', go: 'catalogo', body: dashCatalog() }) +
+  var html = intro('Come stiamo andando', 'Dashboard', '', '', plusBtn('dash-month', cur, 'Aggiorna dati')) + '<div class="toolbar">' + seg + '</div>';
+  /* 1. Shopify: una riga di numeri del mese, un grafico delle vendite, uno del traffico. Niente ripetizioni. */
+  var shop = '<div class="kpis four">' +
+    kpi(eur(c.sales || 0), 'Vendite', deltaHtml(+c.sales || 0, +pz.sales || 0)) +
+    kpi(numIt(c.orders || 0), 'Ordini', deltaHtml(+c.orders || 0, +pz.orders || 0)) +
+    kpi(numIt(c.sessions || 0), 'Sessioni', deltaHtml(+c.sessions || 0, +pz.sessions || 0)) +
+    kpi(numIt(conv(c), 2) + '%', 'Conversione', '<small class="faint">scontrino ' + eur(aov(c)) + '</small>') + '</div>' +
+    (hasData ? '<div class="dash-two"><div><p class="chart-t">Vendite · ' + n + ' mesi · ' + eur(d.reduce(function (a, x) { return a + x.sales; }, 0)) + '</p>' + svgBars(d.map(function (x) { return { l: x.l, v: x.sales, cur: x.cur }; }), { fmt: function (v) { return numIt(v) + ' €'; }, aria: 'Vendite per mese' }) + '</div>' +
+      '<div><p class="chart-t">Sessioni · ' + numIt(d.reduce(function (a, x) { return a + x.sessions; }, 0)) + ' nel periodo</p>' + svgLine(d.map(function (x) { return { l: x.l, v: x.sessions, cur: x.cur }; }), { aria: 'Sessioni per mese' }) + '</div></div>' : '<div class="empty-note">Ancora nessun dato Shopify: tocca “Aggiorna dati” o chiedilo a Claude.</div>') +
+    '<p class="note">' + ymLabel(cur) + ' vs mese prima' + (last ? ' · aggiornato il ' + niceDate(last.slice(0, 10)) : '') + '</p>';
+  html += '<div class="blocks">' + block({ title: 'Shopify', cls: 'wide', body: shop }) +
     block({ title: 'Finanze', go: 'finanze', body: dashFinance(months) }) +
+    block({ title: 'Magazzino', go: 'magazzino', body: dashStock() }) +
+    block({ title: 'Contenuti', go: 'canali', body: dashContent(months) }) +
+    block({ title: 'Task', go: 'task', body: dashTasks() }) +
+    block({ title: 'Catalogo', go: 'catalogo', body: dashCatalog() }) +
     '</div>';
   return html;
 }
+function dashStock() {
+  var oc = ordersCompletable(), al = stockAlerts(), ps = printStats(), uc = unitCost();
+  return '<div class="kpis two">' + kpi(oc, 'Ordini completabili', oc <= 5 ? '<small class="delta down">scorte quasi finite</small>' : '<small class="faint">con i componenti in casa</small>', oc <= 5 ? 'neg' : '') + kpi(ps.todo, 'Grafiche da stampare', ps.urgent ? '<small class="delta down">' + ps.urgent + ' urgente' + (ps.urgent > 1 ? 'i' : '') + '</small>' : '<small class="faint">' + ps.raw + ' copie RAW in casa</small>') + '</div>' +
+    (al.length ? '<div class="list tight">' + al.slice(0, 4).map(function (c) { var k = ordersCovered(c); return '<button class="item flat" data-act="edit-comp" data-v="' + esc(c.id) + '"><div class="tx"><strong>' + esc(c.name) + '</strong><small>' + numIt(c.qty) + ' ' + esc(c.unit || '') + '</small></div><span class="chip st-' + (k === 0 ? 'no' : 'doing') + '"><i></i>' + k + ' ordini</span></button>'; }).join('') + '</div>' : '<p class="note">Nessun componente sotto i 10 ordini.</p>') +
+    '<p class="note">Un quadretto costa ' + eur(uc.total) + ' di materiali.</p>';
+}
+function n_label(months) { return months.length + ' mesi'; }
 function dashContent(months) {
   var ps = allPosts().filter(function (p) { return p.status === 'pubblicato' && p.date; });
   var items = months.map(function (k) { var m = ps.filter(function (p) { return ym(p.date) === k; }); return { l: shortK(k), v: m.filter(function (p) { return p.channel === 'instagram'; }).length, v2: m.filter(function (p) { return p.channel === 'tiktok'; }).length, cur: k === ym(today()) }; });
   var tot = ps.filter(function (p) { return months.indexOf(ym(p.date)) >= 0; }).length, mail = ps.filter(function (p) { return p.channel === 'klaviyo' && months.indexOf(ym(p.date)) >= 0; }).length;
-  return '<div class="kpis two">' + kpi(tot, 'Pubblicati nel periodo', '') + kpi(mail, 'Email inviate', '') + '</div>' + svgBars(items, { aria: 'Contenuti pubblicati per mese' }) + '<p class="legend"><i style="background:var(--accent)"></i>Instagram <i style="background:var(--doing)"></i>TikTok</p>';
+  return '<div class="kpis two">' + kpi(tot, 'Pubblicati', '<small class="faint">' + n_label(months) + '</small>') + kpi(mail, 'Email inviate', '') + '</div>' + svgBars(items, { aria: 'Contenuti pubblicati per mese' }) + '<p class="legend"><i style="background:var(--accent)"></i>Instagram <i style="background:var(--doing)"></i>TikTok</p>';
 }
 function dashTasks() {
   var ts = allTasks().filter(function (t) { return t.status === 'fatto' && t.doneAt; }), weeks = [], now = new Date(today() + 'T12:00:00');
@@ -5898,9 +6001,10 @@ function dashCatalog() {
   return '<div class="kpis two">' + kpi((fm.length ? Math.round(full / fm.length * 100) : 0) + '%', 'Prodotti con tutte le fasi', '<small class="faint">' + full + ' su ' + fm.length + '</small>') + kpi(fm.filter(function (f) { return f.shopifyStatus === 'attivo'; }).length, 'Online', '') + '</div>' + svgBars(per, { fmt: function (v) { return v + '%'; }, aria: 'Fasi completate in percentuale' });
 }
 function dashFinance(months) {
-  var items = months.map(function (k) { var m = monthCalc(k); return { l: shortK(k), v: Math.round(m.profit || 0), cur: k === ym(today()) }; });
-  var cur = monthCalc(ym(today()));
-  return '<div class="kpis two">' + kpi(eur(cur.profit || 0), 'Utile del mese', '') + kpi(eur(Math.abs(debtTotal())), 'Da saldare', '<small class="faint">' + esc(verdictOf(debtTotal())) + '</small>') + '</div>' + svgBars(items, { color: 'var(--ok)', fmt: function (v) { return numIt(v) + ' €'; }, aria: 'Utile per mese' });
+  var t = financeTotals();
+  var items = months.map(function (k) { var m = t.byMonth[k] || { inc: 0, exp: 0 }; return { l: shortK(k), v: Math.round(m.inc - m.exp), cur: k === ym(today()) }; });
+  return '<div class="kpis two">' + kpi(eur(t.result), 'Risultato complessivo', '<small class="faint">entrate − tutto lo speso</small>', t.result < 0 ? 'neg' : 'pos') + kpi(eur(t.cash), 'Cassa', '<small class="faint">' + eur(t.inc) + ' incassati · ' + t.orders + ' ordini</small>') + '</div>' +
+    svgBars(items, { color: 'var(--ok)', fmt: function (v) { return numIt(v) + ' €'; }, aria: 'Saldo per mese' }) + '<p class="note">Saldo del mese: entrate meno uscite, senza l’investimento iniziale.</p>';
 }
 function openDashMonth(k) {
   k = k || ym(today()); var v = dashOf(k);
@@ -6112,7 +6216,7 @@ function searchAll(q) {
   grp('Idee', allIdeas().filter(function (x) { return hit(x.title, x.body); }).map(function (x) { return { ic: I.bulb, t: x.title, s: ideaArea(x.area)[1] + ' · ' + label(IDEA_STATUS, x.status), act: 'idea-open', v: x.id }; }));
   grp('Uscite', vals('releases').filter(function (r) { return hit(r.title, r.notes); }).map(function (r) { return { ic: I.rel, t: r.title, s: (r.date ? niceDate(r.date) + ' · ' : '') + label(REL_STATUS, r.status), act: 'go', v: 'uscita-' + r.id }; }));
   grp('Movimenti', vals('finance/entries').filter(function (e) { return hit(e.label, e.note, e.category, e.title); }).map(function (e) { return { ic: I.chart, t: e.label || e.title || e.category || 'Movimento', s: (e.date ? niceDate(e.date) + ' · ' : '') + eur(e.amount || 0), act: 'edit-entry', v: e.id }; }));
-  grp('Sezioni', [['home', 'Home'], ['task', 'Task'], ['catalogo', 'Catalogo'], ['canali', 'Canali'], ['uscite', 'Uscite'], ['idee', 'Idee'], ['finanze', 'Finanze'], ['dashboard', 'Dashboard'], ['cronologia', 'Cronologia']].filter(function (s) { return hit(s[1]); }).map(function (s) { return { ic: I.arrow, t: s[1], s: 'Vai alla sezione', act: 'go', v: s[0] }; }));
+  grp('Sezioni', [['home', 'Home'], ['task', 'Task'], ['catalogo', 'Catalogo'], ['canali', 'Canali'], ['uscite', 'Uscite'], ['idee', 'Idee'], ['finanze', 'Finanze'], ['magazzino', 'Magazzino'], ['dashboard', 'Dashboard'], ['cronologia', 'Cronologia']].filter(function (s) { return hit(s[1]); }).map(function (s) { return { ic: I.arrow, t: s[1], s: 'Vai alla sezione', act: 'go', v: s[0] }; }));
   return out;
 }
 function openSearch() {
@@ -6438,7 +6542,7 @@ function ctxLane(owner) {
 /* ================= BARRA LATERALE (desktop) ================= */
 var SIDE_ITEMS = [
   ['home', 'home', 'Home', 'home'], ['tasks', 'task', 'Task', 'task'], ['catalog', 'catalogo', 'Catalogo', 'cat'], ['channels', 'canali', 'Canali', 'ch'],
-  ['releases', 'uscite', 'Uscite', 'rel'], ['ideas', 'idee', 'Idee', 'bulb'], ['finance', 'finanze', 'Finanze', 'euro'], ['dash', 'dashboard', 'Dashboard', 'chart'], ['log', 'cronologia', 'Cronologia', 'clock']
+  ['releases', 'uscite', 'Uscite', 'rel'], ['ideas', 'idee', 'Idee', 'bulb'], ['finance', 'finanze', 'Finanze', 'euro'], ['stock', 'magazzino', 'Magazzino', 'box'], ['dash', 'dashboard', 'Dashboard', 'chart'], ['log', 'cronologia', 'Cronologia', 'clock']
 ];
 function sideCur() { var v = app.view; return v === 'card' || v === 'bundle' ? 'catalog' : v === 'channel' ? 'channels' : v === 'release' ? 'releases' : v; }
 function sideBadges() {
@@ -6481,8 +6585,9 @@ function subIcon(sec, k) {
     channels: { instagram: SUBI.camera, tiktok: SUBI.note, klaviyo: I.mail },
     releases: { attive: SUBI.rocket, idee: SUBI.sparkle, archivio: SUBI.archive },
     ideas: { lavagna: SUBI.grid, lista: SUBI.list },
-    finance: { mese: SUBI.scale, movimenti: I.swap, debiti: SUBI.receipt },
-    dash: { 'Contenuti pubblicati': I.play, 'Task fatte': I.task, 'Catalogo pronto': I.cat, 'Finanze': I.euro }
+    finance: { mese: SUBI.scale, movimenti: I.swap, soci: SUBI.receipt },
+    stock: { componenti: SUBI.box, stampe: I.img, omaggi: SUBI.sparkle },
+    dash: { 'Shopify': I.chart, 'Finanze': I.euro, 'Magazzino': SUBI.box, 'Contenuti': I.play, 'Task': I.task, 'Catalogo': I.cat }
   };
   return (m[sec] && m[sec][k]) || (sec === 'channels' ? I.ch : '');
 }
@@ -6502,9 +6607,12 @@ function sideSubs(sec) {
   } else if (sec === 'ideas') {
     out = [{ k: 'lavagna', label: 'Lavagna', on: v === 'ideas' && (app.i.mode || 'lavagna') === 'lavagna' }, { k: 'lista', label: 'Lista', on: v === 'ideas' && app.i.mode === 'lista' }];
   } else if (sec === 'finance') {
-    out = [['mese', 'Bilancio'], ['movimenti', 'Movimenti'], ['debiti', 'Debiti']].map(function (x) { return { k: x[0], label: x[1], on: v === 'finance' && (app.f.tab || 'mese') === x[0] }; });
+    out = [['mese', 'Bilancio'], ['movimenti', 'Movimenti'], ['soci', 'Soci']].map(function (x) { return { k: x[0], label: x[1], on: v === 'finance' && (app.f.tab || 'mese') === x[0] }; });
+  } else if (sec === 'stock') {
+    var ps = printStats();
+    out = [{ k: 'componenti', label: 'Componenti', n: ordersCompletable(), on: v === 'stock' && app.stock.tab === 'componenti' }, { k: 'stampe', label: 'Stampe', n: ps.todo, on: v === 'stock' && app.stock.tab === 'stampe' }, { k: 'omaggi', label: 'Omaggi', n: gifts().length, on: v === 'stock' && app.stock.tab === 'omaggi' }];
   } else if (sec === 'dash') {
-    out = [['Contenuti pubblicati', 'Contenuti'], ['Task fatte', 'Task'], ['Catalogo pronto', 'Catalogo'], ['Finanze', 'Finanze']].map(function (x) { return { k: x[0], label: x[1], on: false }; });
+    out = [['Shopify', 'Shopify'], ['Finanze', 'Finanze'], ['Magazzino', 'Magazzino'], ['Contenuti', 'Contenuti'], ['Task', 'Task'], ['Catalogo', 'Catalogo']].map(function (x) { return { k: x[0], label: x[1], on: false }; });
   }
   return out;
 }
@@ -6524,6 +6632,7 @@ function sideSub(v) {
   else if (sec === 'releases') { app.r.view = k; go('uscite'); }
   else if (sec === 'ideas') { app.i.mode = k; go('idee'); }
   else if (sec === 'finance') { app.f.tab = k; go('finanze'); }
+  else if (sec === 'stock') { app.stock.tab = k; go('magazzino'); }
   else if (sec === 'dash') {
     go('dashboard');
     after(function () {
@@ -6655,6 +6764,158 @@ function syncBoards() {
 }
 window.addEventListener('resize', function () { if (window.innerWidth < 900) laneScroll(app.lane, false); });
 
+
+/* ===== MAGAZZINO: componenti, stampe (grafiche), omaggi ai creator =====
+   Nodi: inventory/components/<id>, inventory/prints/<id>, inventory/cost/<id>, gifts/<id> */
+var PRINT_STATUS = [['urgente', 'Urgente'], ['da_stampare', 'Da stampare'], ['stampata', 'Stampata']];
+var GIFT_TYPES = [['collab', 'Collab'], ['giveaway', 'Giveaway']];
+var GIFT_STATUS = [['da_preparare', 'Da preparare'], ['spedito', 'Spedito'], ['consegnato', 'Consegnato']];
+app.stock = app.stock || { tab: 'componenti', pf: 'da_fare' };
+
+function components() { return vals('inventory/components').sort(function (a, b) { return (a.order || 0) - (b.order || 0); }); }
+function prints() { return vals('inventory/prints').sort(function (a, b) { return (a.order || 0) - (b.order || 0); }); }
+function gifts() { return vals('gifts').sort(function (a, b) { return (a.order || 0) - (b.order || 0); }); }
+function ordersCovered(c) { var per = +c.perOrder || 1; return Math.floor((+c.qty || 0) / per); }
+function ordersCompletable() {
+  var core = components().filter(function (c) { return c.core !== false; });
+  if (!core.length) return 0;
+  return core.reduce(function (m, c) { return Math.min(m, ordersCovered(c)); }, Infinity);
+}
+function stockAlerts() {
+  return components().filter(function (c) { return ordersCovered(c) <= 10; }).sort(function (a, b) { return ordersCovered(a) - ordersCovered(b); });
+}
+function printStats() {
+  var ps = prints(), s = { raw: 0, psa: 0, todo: 0, urgent: 0, white: 0, printed: 0 };
+  ps.forEach(function (p) { s.raw += +p.raw || 0; s.psa += +p.psa || 0; if (p.status === 'urgente') { s.urgent++; s.todo++; } else if (p.status === 'da_stampare') s.todo++; else s.printed++; if (p.whiteBorder) s.white++; });
+  return s;
+}
+function stockSummary() {
+  var oc = ordersCompletable(), al = stockAlerts(), ps = printStats();
+  return '<div class="mstats">' + miniStat(oc, 'Ordini completabili', 'stock-go', 'data-v="componenti"', oc <= 5 ? true : oc <= 15 ? 'attn' : false) + miniStat(ps.todo, 'Grafiche da stampare', 'stock-go', 'data-v="stampe"', ps.urgent ? true : ps.todo ? 'attn' : false) + miniStat(gifts().filter(function (g) { return g.status !== 'consegnato'; }).length, 'Omaggi da fare', 'stock-go', 'data-v="omaggi"') + '</div>';
+}
+
+function viewStock() {
+  var t = app.stock.tab;
+  var seg = '<div class="seg">' + [['componenti', 'Componenti'], ['stampe', 'Stampe'], ['omaggi', 'Omaggi']].map(function (x) { return '<button class="' + (t === x[0] ? 'on' : '') + '" data-act="stock-tab" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
+  var plus = t === 'componenti' ? plusBtn('new-comp', '', 'Nuovo componente') : t === 'stampe' ? plusBtn('new-print', '', 'Nuova grafica') : plusBtn('new-gift', '', 'Nuovo omaggio');
+  var html = intro('Scorte e stampe', 'Magazzino', '', '', plus) + block({ title: 'Riepilogo', body: stockSummary(), cls: 'first' }) + '<div style="height:14px"></div>' + seg + '<div style="height:14px"></div>';
+  if (t === 'componenti') html += stockComponents();
+  else if (t === 'stampe') html += stockPrints();
+  else html += stockGifts();
+  return html;
+}
+function stockComponents() {
+  var oc = ordersCompletable(), cs = components();
+  var body = '<p class="note" style="margin:0 0 12px">Ogni ordine usa: 1 set di plexiglass (3 lastre), 1 bustina (2 viti 3 cm + 2 viti 5 cm + 1 panno), 1 sleeve, adesivi, 1 scatola, imballaggio. Gli ordini completabili sono il minimo tra i componenti principali.</p>' +
+    '<div class="list">' + cs.map(function (c) {
+      var n = ordersCovered(c), cls = n === 0 ? 'no' : n <= 10 ? 'doing' : 'ok';
+      return '<button class="item" data-act="edit-comp" data-v="' + esc(c.id) + '"><div class="tx"><strong>' + esc(c.name) + (c.core === false ? ' <span class="faint" style="font-weight:500">· per le bustine</span>' : '') + '</strong><small>' + numIt(c.qty) + ' ' + esc(c.unit || '') + (+c.perOrder > 1 ? ' · ' + c.perOrder + ' per ordine' : '') + (c.note ? ' · ' + esc(c.note) : '') + '</small></div><span class="chip st-' + cls + '"><i></i>' + n + ' ordini</span></button>';
+    }).join('') + '</div>';
+  return block({ title: 'Componenti', count: oc + ' ordini completabili', add: ['new-comp', '', 'Nuovo componente'], body: body }) + block({ title: 'Costo di un quadretto', body: stockCost() });
+}
+function stockCost() {
+  var uc = unitCost();
+  return '<div class="kpis two"><div class="kpi"><b>' + eur(uc.total) + '</b><span>Materiali per quadretto</span><small class="faint">' + (uc.missing.length ? 'manca: ' + esc(uc.missing.join(', ')) : 'tutte le voci compilate') + '</small></div><div class="kpi"><b>' + eur(uc.total * ordersCompletable()) + '</b><span>Valore dei quadretti completabili</span></div></div>' +
+    '<div class="list">' + uc.rows.map(function (c) { var u = c.lot && c.pieces ? (+c.lot / +c.pieces) * (+c.per || 1) : null; return '<button class="item" data-act="edit-cost" data-v="' + esc(c.id) + '"><div class="tx"><strong>' + esc(c.name) + '</strong><small>' + (c.lot ? eur(c.lot) + ' per ' + (c.pieces || '?') + ' pezzi' : 'lotto da compilare') + (+c.per > 1 ? ' · ' + c.per + ' per quadretto' : '') + (c.note ? ' · ' + esc(c.note) : '') + '</small></div><span class="amount">' + (u != null ? eur(u) : '—') + '</span></button>'; }).join('') + '</div>';
+}
+function stockPrints() {
+  var ps = prints(), f = app.stock.pf, st = printStats();
+  var filt = { da_fare: function (p) { return p.status !== 'stampata'; }, urgenti: function (p) { return p.status === 'urgente'; }, contorno: function (p) { return !!p.whiteBorder; }, stampate: function (p) { return p.status === 'stampata'; }, tutte: function () { return true; } };
+  var shown = ps.filter(filt[f] || filt.tutte).sort(function (a, b) { var o = { urgente: 0, da_stampare: 1, stampata: 2 }; return (o[a.status] - o[b.status]) || (a.order || 0) - (b.order || 0); });
+  var filters = '<div class="filters">' + [['da_fare', 'Da fare', st.todo], ['urgenti', 'Urgenti', st.urgent], ['contorno', 'Contorno bianco', st.white], ['stampate', 'Stampate', st.printed], ['tutte', 'Tutte', ps.length]].map(function (x) { return '<button class="fbtn' + (f === x[0] ? ' on' : '') + '" data-act="stock-pf" data-v="' + x[0] + '">' + x[1] + '<span class="n">' + x[2] + '</span></button>'; }).join('') + '</div>';
+  var body = '<div class="kpis three"><div class="kpi"><b>' + st.raw + '</b><span>Copie RAW in casa</span></div><div class="kpi"><b>' + st.psa + '</b><span>Copie PSA</span></div><div class="kpi"><b>' + st.white + '</b><span>Da ristampare</span><small class="faint">contorno bianco</small></div></div>' + filters +
+    '<div class="list">' + (shown.length ? shown.map(function (p) {
+      return '<button class="item" data-act="edit-print" data-v="' + esc(p.id) + '"><div class="tx"><strong>' + esc(p.card) + ' <span class="faint" style="font-weight:600">' + esc(p.code || '') + '</span></strong><small>' + esc(p.expansion || '') + (p.whiteBorder ? ' · <span class="st-doing">contorno bianco</span>' : '') + (p.note ? ' · ' + esc(p.note) : '') + '</small></div>' + (p.status === 'stampata' ? '<span class="amount">' + (+p.raw || 0) + ' <small>RAW</small></span>' : '') + statusChip(PRINT_STATUS, p.status) + '</button>';
+    }).join('') : '<div class="empty-note">Niente qui.</div>') + '</div>';
+  return block({ title: 'Grafiche', count: shown.length, add: ['new-print', '', 'Nuova grafica'], body: body });
+}
+function stockGifts() {
+  var gs = gifts(), tot = gs.reduce(function (a, g) { return a + (+g.qty || 0); }, 0);
+  var body = '<p class="note" style="margin:0 0 12px">Quadretti dati ai creator per collaborazioni e giveaway. Ogni riga è un pezzo uscito dal magazzino.</p>' +
+    '<div class="kpis two"><div class="kpi"><b>' + tot + '</b><span>Quadretti regalati</span></div><div class="kpi"><b>' + gs.filter(function (g) { return g.type === 'collab'; }).length + '</b><span>Creator in collab</span></div></div>' +
+    '<div class="list">' + (gs.length ? gs.map(function (g) {
+      return '<button class="item" data-act="edit-gift" data-v="' + esc(g.id) + '"><div class="tx"><strong>' + esc(g.to) + '</strong><small>' + label(GIFT_TYPES, g.type) + ' · ' + (+g.qty || 1) + (g.qty > 1 ? ' quadretti' : ' quadretto') + (g.card ? ' · ' + esc(g.card) : '') + (g.note ? ' · ' + esc(g.note) : '') + '</small></div>' + statusChip(GIFT_STATUS, g.status || 'consegnato') + '</button>';
+    }).join('') : '<div class="empty-note">Nessun omaggio.</div>') + '</div>';
+  return block({ title: 'Omaggi', count: gs.length, add: ['new-gift', '', 'Nuovo omaggio'], body: body });
+}
+
+/* ---- schede ---- */
+function openComp(id) {
+  var c = id ? obj('inventory/components/' + id) : null, v = c || { name: '', qty: 0, unit: 'pezzi', perOrder: 1, note: '', core: true };
+  openSheet({
+    title: c ? 'Componente' : 'Nuovo componente', focus: c ? '[name=qty]' : '[name=name]', del: c ? function () { deleteWithUndo('inventory/components/' + id, 'stock', c.name, 'Componente eliminato'); } : null,
+    body: '<div class="f"><label>Nome</label><input name="name" required value="' + esc(v.name) + '"></div>' +
+      '<div class="row2"><div class="f"><label>Quantità</label><input name="qty" type="number" inputmode="numeric" value="' + esc(v.qty) + '"></div><div class="f"><label>Unità</label><input name="unit" value="' + esc(v.unit || '') + '"></div></div>' +
+      '<div class="f"><label>Pezzi per ordine</label><input name="perOrder" type="number" inputmode="numeric" value="' + esc(v.perOrder || 1) + '"></div>' +
+      '<div class="f"><span class="l">Conta per gli ordini completabili</span>' + optGroup('core', [['1', 'Sì'], ['0', 'No, serve ad altro']], v.core === false ? '0' : '1') + '</div>' +
+      '<div class="f"><label>Note</label><input name="note" value="' + esc(v.note || '') + '"></div>',
+    onOpt: function (g, val) { if (g === 'core') v.core = val === '1'; },
+    submit: function (fd) {
+      var rec = { name: fv(fd, 'name'), qty: +fv(fd, 'qty') || 0, unit: fv(fd, 'unit'), perOrder: +fv(fd, 'perOrder') || 1, note: fv(fd, 'note'), core: v.core !== false, order: c ? (c.order || 0) : components().length };
+      var k = id || slugId(rec.name); window._fbSet('inventory/components/' + k, rec); logActivity('stock', k, c ? 'modifica' : 'crea', [], rec.name); toast(rec.name + ' salvato', 'ok');
+    }
+  });
+}
+function openPrint(id) {
+  var p = id ? obj('inventory/prints/' + id) : null, v = p || { card: '', code: '', status: 'da_stampare', whiteBorder: false, raw: 0, psa: 0, expansion: '', note: '' };
+  openSheet({
+    title: p ? v.card : 'Nuova grafica', sub: p ? (v.code || '') : '', focus: p ? '[name=raw]' : '[name=card]', del: p ? function () { deleteWithUndo('inventory/prints/' + id, 'stock', p.card, 'Grafica eliminata'); } : null,
+    body: (p ? '' : '<div class="f"><label>Carta</label><input name="card" required value=""></div>') +
+      '<div class="f"><span class="l">Stato</span>' + optGroup('status', PRINT_STATUS, v.status, statusDeco, 'status') + '</div>' +
+      '<div class="row2"><div class="f"><label>Copie RAW</label><input name="raw" type="number" inputmode="numeric" value="' + esc(v.raw || 0) + '"></div><div class="f"><label>Copie PSA</label><input name="psa" type="number" inputmode="numeric" value="' + esc(v.psa || 0) + '"></div></div>' +
+      '<div class="f"><span class="l">Contorno bianco (da ristampare)</span>' + optGroup('white', [['0', 'No'], ['1', 'Sì']], v.whiteBorder ? '1' : '0') + '</div>' +
+      '<details class="more"' + (p ? '' : ' open') + '><summary>Altro</summary>' + (p ? '<div class="f"><label>Carta</label><input name="card" value="' + esc(v.card) + '"></div>' : '') +
+      '<div class="row2"><div class="f"><label>Codice</label><input name="code" value="' + esc(v.code || '') + '"></div><div class="f"><label>Espansione</label><input name="expansion" value="' + esc(v.expansion || '') + '"></div></div>' +
+      '<div class="f"><label>Note</label><input name="note" value="' + esc(v.note || '') + '"></div></details>',
+    onOpt: function (g, val) { if (g === 'status') v.status = val; if (g === 'white') v.whiteBorder = val === '1'; },
+    submit: function (fd) {
+      var rec = { card: fv(fd, 'card'), code: fv(fd, 'code'), status: v.status, whiteBorder: !!v.whiteBorder, raw: +fv(fd, 'raw') || 0, psa: +fv(fd, 'psa') || 0, expansion: fv(fd, 'expansion'), note: fv(fd, 'note'), order: p ? (p.order || 0) : prints().length };
+      var k = id || slugId(rec.card); window._fbSet('inventory/prints/' + k, rec); logActivity('stock', k, p ? 'modifica' : 'crea', [], rec.card); toast(rec.card + ' salvata', 'ok');
+    }
+  });
+}
+function openGift(id) {
+  var g = id ? obj('gifts/' + id) : null, v = g || { to: '', type: 'collab', qty: 1, card: '', note: '', status: 'da_preparare' };
+  openSheet({
+    title: g ? v.to : 'Nuovo omaggio', focus: g ? null : '[name=to]', del: g ? function () { deleteWithUndo('gifts/' + id, 'gift', g.to, 'Omaggio eliminato'); } : null,
+    body: '<div class="f"><label>Creator / destinatario</label><input name="to" required value="' + esc(v.to) + '"></div>' +
+      '<div class="f"><span class="l">Tipo</span>' + optGroup('type', GIFT_TYPES, v.type) + '</div>' +
+      '<div class="f"><span class="l">Stato</span>' + optGroup('status', GIFT_STATUS, v.status || 'consegnato', statusDeco, 'status') + '</div>' +
+      '<div class="row2"><div class="f"><label>Quadretti</label><input name="qty" type="number" inputmode="numeric" min="1" value="' + esc(v.qty || 1) + '"></div><div class="f"><label>Carta / grafica</label><input name="card" value="' + esc(v.card || '') + '"></div></div>' +
+      '<div class="f"><label>Note</label><input name="note" value="' + esc(v.note || '') + '"></div>',
+    onOpt: function (grp, val) { if (grp === 'type') v.type = val; if (grp === 'status') v.status = val; },
+    submit: function (fd) {
+      var rec = { to: fv(fd, 'to'), type: v.type, status: v.status, qty: +fv(fd, 'qty') || 1, card: fv(fd, 'card'), note: fv(fd, 'note'), order: g ? (g.order || 0) : gifts().length };
+      var k = id || ('g' + Date.now().toString(36)); window._fbSet('gifts/' + k, rec); logActivity('gift', k, g ? 'modifica' : 'crea', [], rec.to); toast('Omaggio per ' + rec.to + ' salvato', 'ok');
+    }
+  });
+}
+function openCost(id) {
+  var c = obj('inventory/cost/' + id); if (!c) return;
+  openSheet({
+    title: c.name, sub: 'Quanto è costato l’ultimo lotto e quanti pezzi conteneva', focus: '[name=lot]',
+    body: '<div class="row2"><div class="f"><label>Spesa del lotto €</label><input name="lot" type="number" step="0.01" inputmode="decimal" value="' + esc(c.lot || '') + '"></div><div class="f"><label>Pezzi nel lotto</label><input name="pieces" type="number" inputmode="numeric" value="' + esc(c.pieces || '') + '"></div></div>' +
+      '<div class="f"><label>Pezzi per quadretto</label><input name="per" type="number" inputmode="numeric" value="' + esc(c.per || 1) + '"></div><div class="f"><label>Note</label><input name="note" value="' + esc(c.note || '') + '"></div>',
+    submit: function (fd) { var rec = { id: c.id, name: c.name, lot: +fv(fd, 'lot') || null, pieces: +fv(fd, 'pieces') || null, per: +fv(fd, 'per') || 1, note: fv(fd, 'note') }; window._fbSet('inventory/cost/' + c.id, rec); toast('Costo aggiornato', 'ok'); }
+  });
+}
+function slugId(s) { return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || ('x' + Date.now().toString(36)); }
+
+/* ===== Import una tantum dei fogli di Valerio (22/11/2026): libro giornale, investimento iniziale, prelievi, costo per quadretto, magazzino, stampe, omaggi ===== */
+var IMPORT_V1 = {"entries": [{"id": "inv01", "date": "2025-09-01", "kind": "spesa", "paidBy": "soci", "amount": 400.0, "category": "Investimento iniziale", "notes": "Plexiglass", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv02", "date": "2025-09-01", "kind": "spesa", "paidBy": "soci", "amount": 20.0, "category": "Investimento iniziale", "notes": "Prova plexiglass Venuti", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv03", "date": "2025-09-01", "kind": "spesa", "paidBy": "soci", "amount": 10.0, "category": "Investimento iniziale", "notes": "Dominio", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv04", "date": "2025-09-01", "kind": "spesa", "paidBy": "soci", "amount": 70.0, "category": "Investimento iniziale", "notes": "Prime 100 stampe", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv05", "date": "2025-09-01", "kind": "spesa", "paidBy": "soci", "amount": 28.0, "category": "Investimento iniziale", "notes": "100 fogli illustrativi", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv06", "date": "2025-09-01", "kind": "spesa", "paidBy": "soci", "amount": 28.0, "category": "Investimento iniziale", "notes": "Viti", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv07", "date": "2025-09-01", "kind": "spesa", "paidBy": "soci", "amount": 4.0, "category": "Investimento iniziale", "notes": "Pezzuole", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv08", "date": "2025-10-01", "kind": "spesa", "paidBy": "soci", "amount": 80.0, "category": "Investimento iniziale", "notes": "Prova plexiglass Venuti · 30 sistemazione plexiglass, 50 nuovi sample", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv09", "date": "2025-10-01", "kind": "spesa", "paidBy": "soci", "amount": 100.0, "category": "Investimento iniziale", "notes": "Prime 200 stampe", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv10", "date": "2025-10-01", "kind": "spesa", "paidBy": "soci", "amount": 52.0, "category": "Investimento iniziale", "notes": "Viti", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv11", "date": "2025-10-01", "kind": "spesa", "paidBy": "soci", "amount": 5.0, "category": "Investimento iniziale", "notes": "Pezzuole", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv12", "date": "2025-10-01", "kind": "spesa", "paidBy": "soci", "amount": 12.0, "category": "Investimento iniziale", "notes": "Buste spedizione", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv13", "date": "2025-10-01", "kind": "spesa", "paidBy": "soci", "amount": 10.0, "category": "Investimento iniziale", "notes": "Imballaggio", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv14", "date": "2025-10-01", "kind": "spesa", "paidBy": "soci", "amount": 5.5, "category": "Investimento iniziale", "notes": "Adesivi", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv15", "date": "2025-10-01", "kind": "spesa", "paidBy": "soci", "amount": 4.0, "category": "Investimento iniziale", "notes": "Bustine grandi e piccole", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv16", "date": "2025-10-01", "kind": "spesa", "paidBy": "soci", "amount": 27.0, "category": "Investimento iniziale", "notes": "Shopify", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv17", "date": "2025-10-01", "kind": "spesa", "paidBy": "soci", "amount": 13.0, "category": "Investimento iniziale", "notes": "Sleeve", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv18", "date": "2025-10-01", "kind": "spesa", "paidBy": "soci", "amount": 11.0, "category": "Investimento iniziale", "notes": "Espositore per video", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv19", "date": "2025-10-01", "kind": "spesa", "paidBy": "soci", "amount": 50.0, "category": "Investimento iniziale", "notes": "Carta pattern", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv20", "date": "2025-11-01", "kind": "spesa", "paidBy": "soci", "amount": 80.0, "category": "Investimento iniziale", "notes": "Scatole", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "inv21", "date": "2025-11-01", "kind": "spesa", "paidBy": "soci", "amount": 27.0, "category": "Investimento iniziale", "notes": "Shopify", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg001", "date": "2025-12-12", "kind": "spesa", "paidBy": "gabriele", "amount": 27.0, "category": "Abbonamento Shopify", "notes": "Shopify bill", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg002", "date": "2025-12-24", "kind": "incasso", "paidBy": "comune", "amount": 45.99, "category": "Vendita", "notes": "Ordine #1001", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg003", "date": "2025-12-29", "kind": "spesa", "paidBy": "comune", "amount": 12.89, "category": "Spedizione ordine", "notes": "Spedizione ordine #1001", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg004", "date": "2026-01-15", "kind": "incasso", "paidBy": "comune", "amount": 76.26, "category": "Vendita", "notes": "Ordine #1002", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg005", "date": "2026-01-29", "kind": "spesa", "paidBy": "comune", "amount": 70.0, "category": "Stampe", "notes": "Pagamento 200 grafiche", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg006", "date": "2026-01-30", "kind": "spesa", "paidBy": "comune", "amount": 27.0, "category": "Abbonamento Shopify", "notes": "Shopify bill", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg007", "date": "2026-02-04", "kind": "spesa", "paidBy": "valerio", "amount": 15.0, "category": "Spedizione ordine", "notes": "Spedizione ordine #1002 · recuperati con Ordine 1003/4", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg008", "date": "2026-02-07", "kind": "spesa", "paidBy": "valerio", "amount": 27.0, "category": "Abbonamento Shopify", "notes": "Shopify bill · recuperati con Ordine Carlo", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg009", "date": "2026-02-17", "kind": "incasso", "paidBy": "comune", "amount": 30.0, "category": "Vendita", "notes": "Ordine Carlo", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg010", "date": "2026-02-20", "kind": "spesa", "paidBy": "valerio", "amount": 15.0, "category": "Stampe", "notes": "Stampe · recuperati con Ordine 1003/4", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg011", "date": "2026-02-20", "kind": "spesa", "paidBy": "valerio", "amount": 2.0, "category": "Spedizione collab", "notes": "Spedizione Collab Famiglia", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg012", "date": "2026-02-27", "kind": "incasso", "paidBy": "comune", "amount": 75.0, "category": "Vendita", "notes": "Ordine #1003", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg013", "date": "2026-02-28", "kind": "incasso", "paidBy": "comune", "amount": 55.61, "category": "Vendita", "notes": "Ordine #1004", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg014", "date": "2026-03-02", "kind": "spesa", "paidBy": "comune", "amount": 35.89, "category": "Spedizione ordine", "notes": "Spedizione Ordine #1004", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg015", "date": "2026-03-11", "kind": "spesa", "paidBy": "comune", "amount": 27.0, "category": "Abbonamento Shopify", "notes": "Shopify bill", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg016", "date": "2026-03-23", "kind": "spesa", "paidBy": "comune", "amount": 2.0, "category": "Spedizione collab", "notes": "Spedizione Sponsor Veli Sbusto", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg017", "date": "2026-03-27", "kind": "spesa", "paidBy": "comune", "amount": 50.0, "category": "Stampe", "notes": "Pagamento 100 grafiche", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg018", "date": "2026-03-31", "kind": "spesa", "paidBy": "comune", "amount": 31.0, "category": "Spedizione ordine", "notes": "Spedizione Ordine #1003 · -11 Vale", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg019", "date": "2026-04-01", "kind": "spesa", "paidBy": "valerio", "amount": 2.0, "category": "Spedizione collab", "notes": "Spedizione Poke wisty", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg020", "date": "2026-04-02", "kind": "spesa", "paidBy": "valerio", "amount": 2.0, "category": "Spedizione collab", "notes": "Spedizione Maurizio", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg021", "date": "2026-04-02", "kind": "spesa", "paidBy": "valerio", "amount": 5.0, "category": "Spedizione collab", "notes": "Spedizione Poke Time · Data mancante nel file originale", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg022", "date": "2026-04-13", "kind": "spesa", "paidBy": "valerio", "amount": 27.0, "category": "Abbonamento Shopify", "notes": "Shopify bill", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg023", "date": "2026-04-22", "kind": "spesa", "paidBy": "valerio", "amount": 27.0, "category": "Abbonamento Shopify", "notes": "Shopify bill", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg024", "date": "2026-05-05", "kind": "spesa", "paidBy": "gabriele", "amount": 27.7, "category": "Dominio ed email", "notes": "Pagamento email con dominio", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg025", "date": "2026-05-22", "kind": "spesa", "paidBy": "valerio", "amount": 27.0, "category": "Abbonamento Shopify", "notes": "Shopify bill", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg026", "date": "2026-06-20", "kind": "incasso", "paidBy": "comune", "amount": 42.0, "category": "Vendita", "notes": "Ordine #1005", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg027", "date": "2026-06-21", "kind": "incasso", "paidBy": "comune", "amount": 105.0, "category": "Vendita", "notes": "Ordine #1006", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg028", "date": "2026-06-29", "kind": "spesa", "paidBy": "valerio", "amount": 27.0, "category": "Abbonamento Shopify", "notes": "Shopify bill", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg029", "date": "2026-07-06", "kind": "spesa", "paidBy": "valerio", "amount": 32.0, "category": "Spedizione ordine", "notes": "Spedizione Ordine #1006", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg030", "date": "2026-07-07", "kind": "spesa", "paidBy": "valerio", "amount": 27.0, "category": "Abbonamento Shopify", "notes": "Shopify bill", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg031", "date": "2026-07-13", "kind": "spesa", "paidBy": "valerio", "amount": 3.5, "category": "Spedizione collab", "notes": "Spedizione Jafaroo", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg032", "date": "2026-07-14", "kind": "spesa", "paidBy": "valerio", "amount": 3.5, "category": "Spedizione ordine", "notes": "Spedizione Ordine #1005", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg033", "date": "2026-07-14", "kind": "spesa", "paidBy": "valerio", "amount": 60.0, "category": "Stampe", "notes": "100 Stampe", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg034", "date": "2026-08-06", "kind": "spesa", "paidBy": "valerio", "amount": 27.0, "category": "Abbonamento Shopify", "notes": "Shopify bill", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg035", "date": "2026-09-01", "kind": "spesa", "paidBy": "valerio", "amount": 27.0, "category": "Abbonamento Shopify", "notes": "Shopify bill", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg036", "date": "2026-09-01", "kind": "spesa", "paidBy": "valerio", "amount": 16.0, "category": "Dominio ed email", "notes": "Godaddy dominio", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg037", "date": "2026-09-22", "kind": "spesa", "paidBy": "valerio", "amount": 3.5, "category": "Spedizione collab", "notes": "Spedizione Jafaroo 2", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg038", "date": "2026-09-26", "kind": "spesa", "paidBy": "valerio", "amount": 37.0, "category": "Eventi", "notes": "Magliette Romics", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg039", "date": "2026-09-27", "kind": "spesa", "paidBy": "valerio", "amount": 9.0, "category": "Eventi", "notes": "Spedizione inventario Romics", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg040", "date": "2026-09-30", "kind": "spesa", "paidBy": "gabriele", "amount": 55.0, "category": "Eventi", "notes": "Stampe materiale Romics", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg041", "date": "2026-10-05", "kind": "spesa", "paidBy": "valerio", "amount": 27.0, "category": "Abbonamento Shopify", "notes": "Shopify bill September", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg042", "date": "2026-10-08", "kind": "incasso", "paidBy": "comune", "amount": 51.73, "category": "Vendita", "notes": "Ordine #1007", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg043", "date": "2026-10-09", "kind": "spesa", "paidBy": "valerio", "amount": 27.0, "category": "Abbonamento Shopify", "notes": "Shopify bill October", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg044", "date": "2026-10-09", "kind": "spesa", "paidBy": "gabriele", "amount": 100.0, "category": "Strumenti", "notes": "Gabro Claude", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg045", "date": "2026-11-08", "kind": "spesa", "paidBy": "valerio", "amount": 3.5, "category": "Spedizione ordine", "notes": "Spedizione Ordine #1007", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg046", "date": "2026-11-09", "kind": "spesa", "paidBy": "valerio", "amount": 27.0, "category": "Abbonamento Shopify", "notes": "Shopify bill November", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "lg047", "date": "2026-11-09", "kind": "spesa", "paidBy": "valerio", "amount": 50.0, "category": "Pubblicità", "notes": "Facebook Ads Video Jafaroo", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "prel00", "date": "2026-02-27", "kind": "prelievo", "paidBy": "valerio", "amount": 15.0, "category": "Prelievo da cassa", "notes": "Rimborso spedizione ordine #1002, \"recuperati con Ordine 1003/4\": da confermare", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "prel01", "date": "2026-02-27", "kind": "prelievo", "paidBy": "valerio", "amount": 15.0, "category": "Prelievo da cassa", "notes": "Rimborso stampe del 20/02, \"recuperati con Ordine 1003/4\": da confermare", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}, {"id": "prel02", "date": "2026-02-17", "kind": "prelievo", "paidBy": "valerio", "amount": 27.0, "category": "Prelievo da cassa", "notes": "Rimborso Shopify del 07/02, \"recuperati con Ordine Carlo\": da confermare", "status": "aperta", "split": {"gabriele": 50, "valerio": 50}, "source": "valerio-2026-11"}], "cost": [{"id": "plexiglass-set-da-3-lastre", "name": "Plexiglass (set da 3 lastre)", "lot": 400.0, "pieces": 50.0, "per": 1.0, "note": "Lotto di settembre 2025. 50 set: da confermare"}, {"id": "grafica-stampata", "name": "Grafica stampata", "lot": 60.0, "pieces": 100.0, "per": 1.0, "note": "Ultimo lotto: 100 stampe a 60 € (luglio 2026)"}, {"id": "viti-5-cm", "name": "Viti 5 cm", "lot": null, "pieces": null, "per": 2.0, "note": "Lotti di settembre (28 €) e ottobre (52 €): manca il numero di viti"}, {"id": "viti-3-cm", "name": "Viti 3 cm", "lot": null, "pieces": null, "per": 2.0, "note": ""}, {"id": "sleeve", "name": "Sleeve", "lot": 13.0, "pieces": 200.0, "per": 1.0, "note": "Pacco da 200: da confermare"}, {"id": "panno-microfibra", "name": "Panno microfibra", "lot": null, "pieces": null, "per": 1.0, "note": "Lotti da 4 € e 5 €: manca il numero di panni"}, {"id": "adesivi", "name": "Adesivi", "lot": 5.5, "pieces": null, "per": 1.0, "note": "Manca il numero di adesivi"}, {"id": "bustina-per-le-viti", "name": "Bustina per le viti", "lot": 4.0, "pieces": null, "per": 1.0, "note": "Bustine grandi e piccole: manca il numero"}, {"id": "scatola", "name": "Scatola", "lot": 80.0, "pieces": 100.0, "per": 1.0, "note": "Lotto da 100"}, {"id": "busta-di-spedizione", "name": "Busta di spedizione", "lot": 12.0, "pieces": 100.0, "per": 1.0, "note": "Lotto da 100: da confermare"}, {"id": "imballaggio-pluriball", "name": "Imballaggio (pluriball)", "lot": 10.0, "pieces": 100.0, "per": 1.0, "note": "Lotto da 100: da confermare"}, {"id": "foglio-illustrativo", "name": "Foglio illustrativo", "lot": 28.0, "pieces": 100.0, "per": 1.0, "note": ""}], "prints": {"blitzle": {"card": "Blitzle", "code": "PAR 195/182", "status": "urgente", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "Paradox Rift", "note": "Venduto: stampare subito con la nuova grafica", "order": 0}, "bulbasaur": {"card": "Bulbasaur", "code": "MEW 166/165", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "151", "note": "Nuova, non ancora sul sito", "order": 1}, "ivysaur": {"card": "Ivysaur", "code": "MEW 167/165", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "151", "note": "Nuova, non ancora sul sito", "order": 2}, "charmander": {"card": "Charmander", "code": "MEW 168/165", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "151", "note": "", "order": 3}, "charmeleon": {"card": "Charmeleon", "code": "MEW 169/165", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "151", "note": "", "order": 4}, "poliwhirl": {"card": "Poliwhirl", "code": "MEW 176/165", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "151", "note": "", "order": 5}, "venusaur-ex": {"card": "Venusaur ex", "code": "MEW 198/165", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "151", "note": "Nuova, non ancora sul sito", "order": 6}, "alakazam-ex": {"card": "Alakazam ex", "code": "MEW 201/165", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "151", "note": "", "order": 7}, "zapdos-ex": {"card": "Zapdos ex", "code": "MEW 202/165", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "151", "note": "", "order": 8}, "zacian-v": {"card": "Zacian V", "code": "CRZ GG48/GG70", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "Crown Zenith", "note": "", "order": 9}, "darkrai-vstar": {"card": "Darkrai VSTAR", "code": "CRZ GG50/GG70", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "Crown Zenith", "note": "", "order": 10}, "regigigas-vstar": {"card": "Regigigas VSTAR", "code": "CRZ GG55/GG70", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "Crown Zenith", "note": "", "order": 11}, "snorlax": {"card": "Snorlax", "code": "SVP 051", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "Promo Scarlatto e Violetto", "note": "", "order": 12}, "articuno": {"card": "Articuno", "code": "JTG 161/159", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "Journey Together", "note": "", "order": 13}, "misty-s-psyduck": {"card": "Misty's Psyduck", "code": "DRI 193/182", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "Destined Rivals", "note": "", "order": 14}, "team-rocket-s-meowth": {"card": "Team Rocket's Meowth", "code": "DRI 203/182", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "Destined Rivals", "note": "", "order": 15}, "zorua": {"card": "Zorua", "code": "WHT 142/86", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "White Flare", "note": "", "order": 16}, "hydreigon-ex": {"card": "Hydreigon ex", "code": "WHT 169/86", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "White Flare", "note": "", "order": 17}, "mega-absol-ex": {"card": "Mega Absol ex", "code": "MEG 180/132", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "Mega Evolution", "note": "", "order": 18}, "mega-latias-ex": {"card": "Mega Latias ex", "code": "MEG 181/132", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "Mega Evolution", "note": "", "order": 19}, "gengar-vmax": {"card": "Gengar VMAX", "code": "FST 271/264", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "Fusion Strike", "note": "", "order": 20}, "dragonite-v": {"card": "Dragonite V", "code": "EVS 192/203", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "Evolving Skies", "note": "", "order": 21}, "pikachu-cinese": {"card": "Pikachu (cinese)", "code": "151C 170/151", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "Collect 151 (CN)", "note": "Esaurito sul sito", "order": 22}, "shining-mew-corocoro": {"card": "Shining Mew (CoroCoro)", "code": "Promo CoroCoro n. 151", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "Promo giapponese", "note": "Nuovo sul sito, anche in versione PSA 10. Sul sito risulta esaurito", "order": 23}, "groudon": {"card": "Groudon", "code": "PAR 199/182", "status": "da_stampare", "whiteBorder": false, "raw": 0, "psa": 0, "expansion": "Paradox Rift", "note": "Nuovo sul sito, anche in versione PSA 10. Sul sito risulta esaurito", "order": 24}, "mega-charizard-x-ex": {"card": "Mega Charizard X ex", "code": "PFL 125/094", "status": "stampata", "whiteBorder": false, "raw": 15, "psa": 0, "expansion": "Phantasmal Flames", "note": "", "order": 25}, "mew-ex-promo-rosa": {"card": "Mew ex (promo rosa)", "code": "SVP 053", "status": "stampata", "whiteBorder": false, "raw": 7, "psa": 0, "expansion": "Promo Scarlatto e Violetto", "note": "", "order": 26}, "suicune-v": {"card": "Suicune V", "code": "CRZ GG38/GG70", "status": "stampata", "whiteBorder": true, "raw": 4, "psa": 0, "expansion": "Crown Zenith", "note": "Sul sito è scritto GG44: verificare", "order": 27}, "raikou-v": {"card": "Raikou V", "code": "CRZ GG41/GG70", "status": "stampata", "whiteBorder": true, "raw": 7, "psa": 0, "expansion": "Crown Zenith", "note": "", "order": 28}, "entei-v": {"card": "Entei V", "code": "CRZ GG36/GG70", "status": "stampata", "whiteBorder": true, "raw": 4, "psa": 0, "expansion": "Crown Zenith", "note": "", "order": 29}, "pikachu-ex": {"card": "Pikachu ex", "code": "ASC 276/217", "status": "stampata", "whiteBorder": false, "raw": 6, "psa": 0, "expansion": "Ascended Heroes", "note": "", "order": 30}, "pikachu-v": {"card": "Pikachu V", "code": "LOR TG16/TG30", "status": "stampata", "whiteBorder": true, "raw": 7, "psa": 0, "expansion": "Lost Origin", "note": "", "order": 31}, "gloom": {"card": "Gloom", "code": "OBF 198/197", "status": "stampata", "whiteBorder": false, "raw": 7, "psa": 0, "expansion": "Obsidian Flames", "note": "", "order": 32}, "magikarp": {"card": "Magikarp", "code": "PAL 203/193", "status": "stampata", "whiteBorder": true, "raw": 7, "psa": 0, "expansion": "Paldea Evolved", "note": "", "order": 33}, "giratina-v": {"card": "Giratina V", "code": "LOR 186/196", "status": "stampata", "whiteBorder": false, "raw": 6, "psa": 0, "expansion": "Lost Origin", "note": "", "order": 34}, "mega-lucario-ex": {"card": "Mega Lucario ex", "code": "MEG 179/132", "status": "stampata", "whiteBorder": false, "raw": 7, "psa": 0, "expansion": "Mega Evolution", "note": "", "order": 35}, "leafeon-vstar": {"card": "Leafeon VSTAR", "code": "CRZ GG35/GG70", "status": "stampata", "whiteBorder": false, "raw": 7, "psa": 0, "expansion": "Crown Zenith", "note": "", "order": 36}, "glaceon-vstar": {"card": "Glaceon VSTAR", "code": "CRZ GG40/GG70", "status": "stampata", "whiteBorder": false, "raw": 11, "psa": 0, "expansion": "Crown Zenith", "note": "", "order": 37}, "mewtwo-vstar": {"card": "Mewtwo VSTAR", "code": "CRZ GG44/GG70", "status": "stampata", "whiteBorder": false, "raw": 6, "psa": 0, "expansion": "Crown Zenith", "note": "Da confermare: \"mewtwo\" in lista", "order": 38}, "charizard-vstar": {"card": "Charizard VSTAR", "code": "SWSH 262", "status": "stampata", "whiteBorder": false, "raw": 6, "psa": 0, "expansion": "Promo Spada e Scudo", "note": "Da confermare: primo \"charizard\" in lista", "order": 39}, "mew-ex-bubble": {"card": "Mew ex (bubble)", "code": "PAF 232/091", "status": "stampata", "whiteBorder": true, "raw": 7, "psa": 0, "expansion": "Paldean Fates", "note": "", "order": 40}, "hisuian-samurott-v": {"card": "Hisuian Samurott V", "code": "CRZ GG51/GG70", "status": "stampata", "whiteBorder": true, "raw": 7, "psa": 0, "expansion": "Crown Zenith", "note": "", "order": 41}, "mewtwo-palazzi": {"card": "Mewtwo (palazzi)", "code": "SVP 052", "status": "stampata", "whiteBorder": true, "raw": 7, "psa": 0, "expansion": "Promo Scarlatto e Violetto", "note": "", "order": 42}, "mr-mime": {"card": "Mr. Mime", "code": "MEW 179/165", "status": "stampata", "whiteBorder": true, "raw": 7, "psa": 0, "expansion": "151", "note": "", "order": 43}, "snivy": {"card": "Snivy", "code": "BLK 87/86", "status": "stampata", "whiteBorder": true, "raw": 7, "psa": 0, "expansion": "Black Bolt", "note": "", "order": 44}, "samurott": {"card": "Samurott", "code": "WHT 107/86", "status": "stampata", "whiteBorder": true, "raw": 7, "psa": 0, "expansion": "White Flare", "note": "", "order": 45}, "blastoise-ex": {"card": "Blastoise ex", "code": "MEW 200/165", "status": "stampata", "whiteBorder": true, "raw": 7, "psa": 0, "expansion": "151", "note": "Nuova, non ancora sul sito", "order": 46}, "wartortle": {"card": "Wartortle", "code": "MEW 171/165", "status": "stampata", "whiteBorder": false, "raw": 8, "psa": 0, "expansion": "151", "note": "Nuova, non ancora sul sito", "order": 47}, "squirtle": {"card": "Squirtle", "code": "MEW 170/165", "status": "stampata", "whiteBorder": false, "raw": 8, "psa": 0, "expansion": "151", "note": "", "order": 48}, "mega-gengar-ex": {"card": "Mega Gengar ex", "code": "ASC 284/217", "status": "stampata", "whiteBorder": false, "raw": 7, "psa": 0, "expansion": "Ascended Heroes", "note": "", "order": 49}, "jolteon-vmax": {"card": "Jolteon VMAX", "code": "da confermare", "status": "stampata", "whiteBorder": false, "raw": 8, "psa": 0, "expansion": "Spada e Scudo", "note": "Nuova, non ancora sul sito", "order": 50}, "vaporeon-vmax": {"card": "Vaporeon VMAX", "code": "da confermare", "status": "stampata", "whiteBorder": true, "raw": 8, "psa": 0, "expansion": "Spada e Scudo", "note": "Nuova, non ancora sul sito", "order": 51}, "flareon-vmax": {"card": "Flareon VMAX", "code": "da confermare", "status": "stampata", "whiteBorder": false, "raw": 7, "psa": 0, "expansion": "Spada e Scudo", "note": "Nuova, non ancora sul sito", "order": 52}, "victini": {"card": "Victini", "code": "SVP 208", "status": "stampata", "whiteBorder": false, "raw": 8, "psa": 0, "expansion": "Promo Scarlatto e Violetto", "note": "Nuova, non ancora sul sito", "order": 53}, "charizard-ex": {"card": "Charizard ex", "code": "MEW 199/165", "status": "stampata", "whiteBorder": false, "raw": 6, "psa": 0, "expansion": "151", "note": "Da confermare: secondo \"charizard\" in lista", "order": 54}, "lugia-v-alternativa": {"card": "Lugia V (alternativa)", "code": "SIT 186/195", "status": "stampata", "whiteBorder": true, "raw": 7, "psa": 0, "expansion": "Silver Tempest", "note": "Nuova, non ancora sul sito", "order": 55}, "goku": {"card": "Goku", "code": "—", "status": "stampata", "whiteBorder": false, "raw": 3, "psa": 0, "expansion": "Fuori catalogo Pokémon", "note": "Non è sul sito", "order": 56}}, "components": {"plexiglass-set-da-3-lastre": {"name": "Plexiglass (set da 3 lastre)", "qty": 16, "unit": "set", "perOrder": 1, "note": "Partenza: 39 set. 3 set aperti per fare i video", "order": 0, "core": true}, "bustine-complete": {"name": "Bustine complete", "qty": 9, "unit": "bustine", "perOrder": 1, "note": "Ogni bustina: 2 viti 3 cm + 2 viti 5 cm + 1 panno", "order": 1, "core": true}, "viti-5-cm-sfuse": {"name": "Viti 5 cm (sfuse)", "qty": 8, "unit": "viti", "perOrder": 2, "note": "Per fare nuove bustine", "order": 2, "core": false}, "viti-3-cm-sfuse": {"name": "Viti 3 cm (sfuse)", "qty": 34, "unit": "viti", "perOrder": 2, "note": "Per fare nuove bustine", "order": 3, "core": false}, "panni-microfibra-sfusi": {"name": "Panni microfibra (sfusi)", "qty": 0, "unit": "panni", "perOrder": 1, "note": "Finiti: servono per fare nuove bustine", "order": 4, "core": false}, "sleeve": {"name": "Sleeve", "qty": 750, "unit": "sleeve", "perOrder": 1, "note": "Pacco aperto (stima 150+) + 3 pacchi chiusi da 200", "order": 5, "core": true}, "scatole": {"name": "Scatole", "qty": 80, "unit": "scatole", "perOrder": 1, "note": "Stima, tra montate e da montare", "order": 6, "core": true}}, "gifts": {"g00": {"to": "Consuela", "type": "collab", "qty": 1, "card": "Samurott", "note": "Da specificare: Samurott WHT o Hisuian Samurott CRZ", "status": "consegnato", "order": 0}, "g01": {"to": "Famiglia TCG", "type": "collab", "qty": 1, "card": "Gloom", "note": "Senza carta", "status": "consegnato", "order": 1}, "g02": {"to": "Veli Sbusto", "type": "collab", "qty": 1, "card": "", "note": "", "status": "consegnato", "order": 2}, "g03": {"to": "Poke Wisty (Ludovica)", "type": "collab", "qty": 1, "card": "", "note": "", "status": "consegnato", "order": 3}, "g04": {"to": "Maurizio", "type": "collab", "qty": 1, "card": "", "note": "", "status": "consegnato", "order": 4}, "g05": {"to": "Poke Time", "type": "collab", "qty": 2, "card": "", "note": "", "status": "consegnato", "order": 5}, "g06": {"to": "Negozio Romics", "type": "collab", "qty": 1, "card": "", "note": "", "status": "consegnato", "order": 6}, "g07": {"to": "Jafarroo", "type": "collab", "qty": 1, "card": "", "note": "", "status": "consegnato", "order": 7}, "g08": {"to": "Giveaway contenuto", "type": "giveaway", "qty": 1, "card": "", "note": "", "status": "consegnato", "order": 8}}};
+
+function runImports() {
+  if (!app.data || !obj('meta')) return;
+  if (obj('meta/importV1')) return;
+  var ex = obj('finance/entries') || {};
+  IMPORT_V1.entries.forEach(function (e) { if (!ex[e.id]) window._fbSet('finance/entries/' + e.id, e); });
+  Object.keys(IMPORT_V1.prints).forEach(function (k) { if (!obj('inventory/prints/' + k)) window._fbSet('inventory/prints/' + k, IMPORT_V1.prints[k]); });
+  Object.keys(IMPORT_V1.components).forEach(function (k) { if (!obj('inventory/components/' + k)) window._fbSet('inventory/components/' + k, IMPORT_V1.components[k]); });
+  Object.keys(IMPORT_V1.gifts).forEach(function (k) { if (!obj('gifts/' + k)) window._fbSet('gifts/' + k, IMPORT_V1.gifts[k]); });
+  IMPORT_V1.cost.forEach(function (c) { if (!obj('inventory/cost/' + c.id)) window._fbSet('inventory/cost/' + c.id, c); });
+  window._fbSet('meta/importV1', { at: new Date().toISOString(), by: app.actor || '', source: 'Fogli Valerio 22/11/2026' });
+  logActivity('finance', 'import', 'importa', [], 'Dati di Valerio (finanza, magazzino, stampe, omaggi)');
+}
 
 </script>
 </body>
